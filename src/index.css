@@ -2,22 +2,27 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
 }
 
-a {
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  max-width: 1280px;
+  width: 100%;
+  height: 100vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+a,
+a:visited {
   font-weight: 500;
-  color: #646cff;
   text-decoration: inherit;
+  color: inherit;
 }
 a:hover {
   color: #535bf2;
@@ -34,6 +39,16 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+input {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+}
+
+input:focus {
+  outline: 2px solid #646cff;
 }
 
 button {
@@ -55,15 +70,115 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+
+.projects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.project {
+  min-width: 300px;
+  width: fit-content;
+  height: max-content;
+  padding: 10px;
+  gap: 10px;
+  display: grid;
+  place-items: center;
+  background-color: #ebecf0;
+  border-radius: 12px;
+}
+
+.project a {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+}
+
+.project-buttons {
+  display: flex;
+  gap: 10px;
+}
+.tasks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.column {
+  display: grid;
+  height: fit-content;
+  padding: 10px;
+  gap: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 3px 0px #040404;
+}
+
+.task {
+  display: flex;
+  background-color: gainsboro;
+  padding: 5px;
+  gap: 10px;
+}
+
+.modal-task {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal-task-wrapper {
+  background-color: #f9f9f9;
+  width: 50%;
+  height: 50%;
+}
+
+.task-title {
+  flex: 1 1 0;
+}
+
+.add-task {
+  align-self: end;
+}
+
+.subtask-wrapper {
+  display: grid;
+  place-items: flex-start;
+  padding: 10px;
+  gap: 10px;
+}
+
+.subtask {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.subtask-checkbox:checked + span {
+  text-decoration: line-through;
+}
+
+.queue,
+.development,
+.done {
+  border-top: 5px solid;
+}
+
+.queue {
+  border-color: gray;
+}
+
+.development {
+  border-color: yellow;
+}
+
+.done {
+  border-color: green;
 }
