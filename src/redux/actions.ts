@@ -1,8 +1,13 @@
 import { InitialState } from "../types"
 
-
 const addProject = (state: InitialState, action) => {
     const newState = {...state, projects: [...state.projects, action.payload]}
+    localStorage.setItem('todo-app', JSON.stringify(newState))
+    return newState
+}
+
+const deleteProject = (state: InitialState, action) => {
+    const newState = {...state, projects: state.projects.filter(project => project.id !== action.payload)}
     localStorage.setItem('todo-app', JSON.stringify(newState))
     return newState
 }
@@ -29,6 +34,17 @@ const saveTask = (state: InitialState, action) => {
     })
 }
 
+const addTaskDescription = (state: InitialState, action) => {
+    const newState = {...state, tasks: state.tasks.map(task => {
+        if(task.id === action.payload.id) {
+            task.description = action.payload.description
+        }
+        return task
+    })}
+    localStorage.setItem('todo-app', JSON.stringify(newState))
+    return newState
+}
+
 const addSubTask = (state: InitialState, action) => {
     const newState = {...state, subtasks: [...state.subtasks, action.payload]}
     localStorage.setItem('todo-app', JSON.stringify(newState))
@@ -41,4 +57,4 @@ const deleteSubTask = (state: InitialState, action) => {
     return newState
 }
 
-export {addProject, addTask, deleteTask, saveTask, addSubTask, deleteSubTask}
+export {addProject, deleteProject, addTask, deleteTask, saveTask, addSubTask, deleteSubTask, addTaskDescription}
