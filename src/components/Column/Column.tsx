@@ -14,7 +14,6 @@ const Column = ({ projectId, title, tasks }: Props) => {
     const dispatch = useDispatch()
 
     const [value, setValue] = useState('')
-    const [isOpenForm, setIsOpenForm] = useState(false)
     const addNewTask = () => {
 
         const newTask = {
@@ -29,7 +28,6 @@ const Column = ({ projectId, title, tasks }: Props) => {
             payload: newTask
         })
         setValue('')
-        setIsOpenForm(false)
     }
 
     
@@ -45,31 +43,8 @@ const Column = ({ projectId, title, tasks }: Props) => {
                     }
                 </>
             }
-            {
-                isOpenForm &&
-                <div>
-                    <input value={value} onChange={(e) => setValue(e.target.value)} />
-                    <button
-                        onClick={addNewTask}
-                    >
-                        Add
-                    </button>
-                    <button
-                        onClick={() => setIsOpenForm(false)}
-                    >
-                        Close
-                    </button>
-                </div>
-            }
-            {
-                !isOpenForm &&
-                <button
-                    onClick={() => setIsOpenForm(true)}
-                    className="add-task"
-                >
-                    Add new task
-                </button>
-            }
+            <input autoFocus value={value} onChange={(e) => setValue(e.target.value)} placeholder='Add new task' />
+            <button onClick={addNewTask}>Add</button>
         </div>
     )
 }

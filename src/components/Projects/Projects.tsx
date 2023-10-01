@@ -63,7 +63,7 @@ const Projects = () => {
                     ? <button onClick={() => setIsOpenForm(true)}>Add new project</button>
                     : <>
                         <input type="text" ref={ref} value={value} onChange={handleChange} autoFocus/>
-                        <div className="project-buttons">
+                        <div className="buttons">
                             <button onClick={addNewProject}>add</button>
                             <button onClick={closeForm}>close</button>
                         </div>
