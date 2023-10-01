@@ -14,7 +14,7 @@ const SubTaskItem = ({id, title}: SubTask) => {
     <div key={id} className="subtask">
         <input type="checkbox" className="subtask-checkbox" />
         <span className="subtask-title">{title}</span>
-        <button onClick={() => deleteSubTask(id)}>x</button>
+        <button onClick={() => deleteSubTask(id)}>Delete</button>
     </div>
   )
 }

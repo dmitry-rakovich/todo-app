@@ -24,7 +24,7 @@ const TaskItem = (task: Task) => {
       {isShowTask && <ModalTask task={task} toggleTask={toggleTask} />}
       <div className='task' onClick={toggleTask}>
         <h2 className='task-title'>{task.title}</h2>
-        <button onClick={() => deleteTask(task.id)}>x</button>
+        <button onClick={() => deleteTask(task.id)}>Delete</button>
       </div>
     </>
   )
