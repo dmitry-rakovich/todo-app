@@ -2,24 +2,24 @@ import { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { InitialState, SubTask, Task } from "../../types"
 import SubTaskItem from "../SubtaskItem/SubTaskItem"
+import { Editor } from '@tinymce/tinymce-react'
 type Props = {
     task: Task,
     toggleTask: React.MouseEventHandler<HTMLButtonElement>
 }
-const ModalTask = ({task: {description, id}, toggleTask}: Props) => {
+const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
 
-    console.log();
-    
     const dispatch = useDispatch()
+
+    const editorRef = useRef(null);
     const inputRef = useRef<HTMLInputElement>(null)
 
     const subTasks = useSelector<InitialState, SubTask[]>((state) => state.subtasks)
 
-
+    const [dirty, setDirty] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const [subTaskTitle, setSubTaskTitle] = useState('')
-    const [subtaskDescription, setSubTaskDescription] = useState(description)
-
-
+    
     const addSubTask = () => {
         dispatch({
             type: "ADD_SUBTASK",
@@ -33,36 +33,52 @@ const ModalTask = ({task: {description, id}, toggleTask}: Props) => {
         inputRef.current?.focus()
     }
 
-    const addDescription = () => {
-        dispatch({
-            type: "ADD_SUBTASK_DESCRIPTION",
-            payload: {
-                id,
-                description: subtaskDescription
-            }
-        })
-    }
+    const save = () => {
+        if (editorRef.current) {            
+            const content = editorRef.current.getContent();
+            setDirty(false);
+            setIsEdit(false)
+            editorRef.current.setDirty(false);
+            dispatch({
+                type: "ADD_SUBTASK_DESCRIPTION",
+                payload: {
+                    id,
+                    description: content
+                }
+            })
+            console.log(content);
+        }
+    };
 
     return (
         <div className="modal-task">
             <div className="modal-task-wrapper">
-                <button className="close-modal-task" onClick={toggleTask}>x</button>
+                <div className="modal-task-header">
+                    <h2>Task: {title}</h2>
+                    <button className="close-modal-task" onClick={toggleTask}>x</button>
+                </div>
                 <div className="subtasks-wrapper">
                     <h3>Description</h3>
                     {
-                        description
-                            ? <p>{subtaskDescription}</p>
-                            : <div className="subtask-description-form">
-                                <input
-                                    type="text"
-                                    value={subtaskDescription}
-                                    onChange={(e) =>
-                                        setSubTaskDescription(e.target.value)}
-                                    autoFocus
-                                    placeholder="Add description"
+                        isEdit
+                            ? <>
+                                <Editor
+                                    apiKey="fa6f7nl0i6n48irja1r7k22b6adlgwzng7venrfuaf2vazmq"
+                                    initialValue={description || 'No discription'}
+                                    onInit={(evt, editor) => editorRef.current = editor}
+                                    onDirty={() => setDirty(true)}
                                 />
-                                <button onClick={addDescription}>Add description</button>
-                            </div>
+                                <div className="buttons">
+                                    <button onClick={save} disabled={!dirty}>Save description</button>
+                                    <button onClick={() => setIsEdit(false)} >Close Editor</button>
+                                </div>
+                            </>
+                            : <div
+                                className="task-description"
+                                title="Click to edit description"
+                                onClick={() => setIsEdit(true)}
+                                dangerouslySetInnerHTML={{__html: editorRef?.current ? editorRef.current.getContent() : description || 'No description'}}
+                            />
                     }
 
                     <h3>Subtasks</h3>
