@@ -2,8 +2,12 @@ import { useDispatch } from "react-redux"
 import { useState } from "react"
 import { Task } from "../../types"
 import ModalTask from "../ModalTask/ModalTask"
-
-const TaskItem = (task: Task) => {
+import { Draggable } from "react-beautiful-dnd"
+type Props = {
+  task: Task,
+  index: number
+}
+const TaskItem = ({task, index}: Props) => {
 
   const dispatch = useDispatch()
   
@@ -22,10 +26,20 @@ const TaskItem = (task: Task) => {
   return (
     <>
       {isShowTask && <ModalTask task={task} toggleTask={toggleTask} />}
-      <div className='task' onClick={toggleTask}>
-        <h2 className='task-title'>{task.title}</h2>
-        <button onClick={() => deleteTask(task.id)}>Delete</button>
-      </div>
+      <Draggable draggableId={task.id} index={index} key={task.id}>
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <div className='task' onClick={toggleTask}>
+              <h2 className='task-title'>{task.title}</h2>
+              <button onClick={() => deleteTask(task.id)}>Delete</button>
+            </div>
+          </div>
+        )}
+      </Draggable>
     </>
   )
 }

@@ -57,4 +57,28 @@ const deleteSubTask = (state: InitialState, action) => {
     return newState
 }
 
-export {addProject, deleteProject, addTask, deleteTask, saveTask, addSubTask, deleteSubTask, addTaskDescription}
+const refreshTasks = (state: InitialState, action) => {
+    const {currentList, currentIndex, targetList, targetIndex} = action.payload
+
+    const currentColumn = state.tasks.filter(task => task.column === currentList)
+    const targetColumn = state.tasks.filter(task => task.column === targetList)
+    const otherColumn = state.tasks.filter(task => task.column !== targetList && task.column !== currentList)
+    
+    const currentTask = currentColumn[currentIndex]
+    currentTask.column = targetList    
+
+    let newState:InitialState
+    if(currentList !== targetList) {
+        currentColumn.splice(currentIndex, 1)
+        targetColumn.splice(targetIndex, 0, currentTask)
+        newState = {...state, tasks: [...currentColumn, ...targetColumn, ...otherColumn]}
+    } else {
+        currentColumn.splice(currentIndex, 1)
+        currentColumn.splice(targetIndex, 0, currentTask)
+        newState = {...state, tasks: [...currentColumn, ...otherColumn]}
+    }
+    localStorage.setItem('todo-app', JSON.stringify(newState))
+    return newState
+}
+
+export {addProject, deleteProject, addTask, deleteTask, saveTask, addSubTask, deleteSubTask, addTaskDescription, refreshTasks}

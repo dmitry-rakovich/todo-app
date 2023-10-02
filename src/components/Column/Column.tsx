@@ -38,7 +38,7 @@ const Column = ({ projectId, title, tasks }: Props) => {
                 !!tasks.length &&
                 <>
                     {
-                        tasks.map(task => <TaskItem key={task.id} {...task}/>
+                        tasks.map((task, index) => <TaskItem key={task.id} index={index} task={task}/>
                         )
                     }
                 </>
