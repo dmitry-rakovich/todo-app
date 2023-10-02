@@ -17,8 +17,10 @@ const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
     const subTasks = useSelector<InitialState, SubTask[]>((state) => state.subtasks)
 
     const [dirty, setDirty] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
+    const [isEditDescription, setIsEditDescription] = useState(false);
+    const [isEditTitle, setIsEditTitle] = useState(false);
     const [subTaskTitle, setSubTaskTitle] = useState('')
+    const [taskTitle, setTaskTitle] = useState(title)
     
     const addSubTask = () => {
         dispatch({
@@ -33,34 +35,53 @@ const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
         inputRef.current?.focus()
     }
 
-    const save = () => {
+    const saveDescription = () => {
         if (editorRef.current) {            
             const content = editorRef.current.getContent();
             setDirty(false);
-            setIsEdit(false)
+            setIsEditDescription(false)
             editorRef.current.setDirty(false);
             dispatch({
-                type: "ADD_SUBTASK_DESCRIPTION",
+                type: "ADD_TASK_DESCRIPTION",
                 payload: {
                     id,
                     description: content
                 }
             })
-            console.log(content);
         }
     };
+
+    const saveTitle = () => {
+        dispatch({
+            type: "SAVE_TASK_TITLE",
+            payload: {
+                id,
+                title: taskTitle
+            }
+        })
+    }
 
     return (
         <div className="modal-task">
             <div className="modal-task-wrapper">
                 <div className="modal-task-header">
-                    <h2>Task: {title}</h2>
+                    <div className="modal-task-title" title="Click to edit title">
+                        {
+                            isEditTitle
+                            ? <>
+                                <input type="text" value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder="Task Title"/>
+                                <button onClick={saveTitle}>Save</button>
+                                <button onClick={() => setIsEditTitle(false)}>Close</button>
+                            </>
+                            : <h2 onClick={() => setIsEditTitle(true)}>Task: {title}</h2>
+                        }
+                    </div>
                     <button className="close-modal-task" onClick={toggleTask}>x</button>
                 </div>
                 <div className="subtasks-wrapper">
                     <h3>Description</h3>
                     {
-                        isEdit
+                        isEditDescription
                             ? <>
                                 <Editor
                                     apiKey="fa6f7nl0i6n48irja1r7k22b6adlgwzng7venrfuaf2vazmq"
@@ -69,14 +90,14 @@ const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
                                     onDirty={() => setDirty(true)}
                                 />
                                 <div className="buttons">
-                                    <button onClick={save} disabled={!dirty}>Save description</button>
-                                    <button onClick={() => setIsEdit(false)} >Close Editor</button>
+                                    <button onClick={saveDescription} disabled={!dirty}>Save description</button>
+                                    <button onClick={() => setIsEditDescription(false)} >Close Editor</button>
                                 </div>
                             </>
                             : <div
                                 className="task-description"
                                 title="Click to edit description"
-                                onClick={() => setIsEdit(true)}
+                                onClick={() => setIsEditDescription(true)}
                                 dangerouslySetInnerHTML={{__html: editorRef?.current ? editorRef.current.getContent() : description || 'No description'}}
                             />
                     }

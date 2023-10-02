@@ -24,14 +24,11 @@ const deleteTask = (state: InitialState, action) => {
     return newState
 }
 
-const saveTask = (state: InitialState, action) => {
-    return state.tasks.map(task => {
-        if(task.id === action.payload.id) {
-            task.title = action.payload.title
-            return task
-        }
-        return task
-    })
+const saveTaskTitle = (state: InitialState, action) => {
+    const task = state.tasks.find(task => task.id === action.payload.id)!
+    task.title = action.payload.title
+    localStorage.setItem('todo-app', JSON.stringify(state))
+    return state
 }
 
 const addTaskDescription = (state: InitialState, action) => {
@@ -81,4 +78,4 @@ const refreshTasks = (state: InitialState, action) => {
     return newState
 }
 
-export {addProject, deleteProject, addTask, deleteTask, saveTask, addSubTask, deleteSubTask, addTaskDescription, refreshTasks}
+export {addProject, deleteProject, addTask, deleteTask, saveTaskTitle, addSubTask, deleteSubTask, addTaskDescription, refreshTasks}
