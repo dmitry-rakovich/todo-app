@@ -16,12 +16,17 @@ const Column = ({ projectId, title, tasks }: Props) => {
     const [value, setValue] = useState('')
     const addNewTask = () => {
 
-        const newTask = {
+        const newTask:Task = {
             column: title,
             id: window.crypto.randomUUID(),
             projectId,
             subtasks: [],
-            title: value
+            title: value,
+            time: {
+                create: new Date().toDateString(),
+                length: '',
+                finish: ''
+            }
         }
         dispatch({
             type: "ADD_TASK",

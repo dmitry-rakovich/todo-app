@@ -7,7 +7,12 @@ const addProject = (state: InitialState, action) => {
 }
 
 const deleteProject = (state: InitialState, action) => {
-    const newState = {...state, projects: state.projects.filter(project => project.id !== action.payload)}
+    const newState = {
+        ...state,
+        projects: state.projects.filter(project => project.id !== action.payload),
+        tasks: state.tasks.filter(task => task.projectId !== action.payload),
+        subtasks: state.subtasks.filter(subtask => subtask.projectId !== action.payload)
+    }
     localStorage.setItem('todo-app', JSON.stringify(newState))
     return newState
 }
@@ -54,6 +59,13 @@ const deleteSubTask = (state: InitialState, action) => {
     return newState
 }
 
+const checkSubTask = (state: InitialState, action) => {   
+    const subtask = state.subtasks.find(subtask => subtask.id === action.payload.id)
+    subtask.checked = action.payload.checked
+    localStorage.setItem('todo-app', JSON.stringify(state))
+    return state
+}
+
 const refreshTasks = (state: InitialState, action) => {
     const {currentList, currentIndex, targetList, targetIndex} = action.payload
 
@@ -78,4 +90,4 @@ const refreshTasks = (state: InitialState, action) => {
     return newState
 }
 
-export {addProject, deleteProject, addTask, deleteTask, saveTaskTitle, addSubTask, deleteSubTask, addTaskDescription, refreshTasks}
+export {addProject, deleteProject, addTask, deleteTask, saveTaskTitle, addSubTask, deleteSubTask, checkSubTask, addTaskDescription, refreshTasks}

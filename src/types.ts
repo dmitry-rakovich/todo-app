@@ -16,11 +16,21 @@ export type Task = {
     title: string,
     description: string,
     column: 'Queue' | 'Development' | 'Done',
-    subtasks: SubTask[]
+    subtasks: SubTask[],
+    time: Time,
+    priopity: 'Low' | 'Medium' | 'High' 
+}
+
+export type Time = {
+    create: string,
+    length: string,
+    finish: string
 }
 
 export type SubTask = {
     id: string,
     taskId: string,
-    title: string
+    projectId: string,
+    title: string,
+    checked: boolean
 }

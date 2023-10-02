@@ -8,6 +8,7 @@ import {
     saveTaskTitle,
     addSubTask,
     deleteSubTask,
+    checkSubTask,
     refreshTasks
 } from "./actions"
 
@@ -31,6 +32,8 @@ const reducer = (state = initialState, action) => {
         case 'ADD_SUBTASK': return addSubTask(state, action)
 
         case 'DELETE_SUBTASK': return deleteSubTask(state, action)
+
+        case 'CHECK_SUBTASK': return checkSubTask(state, action)
 
         case 'REFRESH_TASKS': return refreshTasks(state, action)
         

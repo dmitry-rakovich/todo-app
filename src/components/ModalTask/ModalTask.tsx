@@ -3,13 +3,17 @@ import { useDispatch, useSelector } from "react-redux"
 import { InitialState, SubTask, Task } from "../../types"
 import SubTaskItem from "../SubtaskItem/SubTaskItem"
 import { Editor } from '@tinymce/tinymce-react'
+import { useParams } from "react-router-dom"
+import FileUpload from "../FileUpload"
+
 type Props = {
     task: Task,
     toggleTask: React.MouseEventHandler<HTMLButtonElement>
 }
-const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
+const ModalTask = ({ task: { description, id, title, time }, toggleTask }: Props) => {
 
     const dispatch = useDispatch()
+    const { id: projectId } = useParams()
 
     const editorRef = useRef(null);
     const inputRef = useRef<HTMLInputElement>(null)
@@ -21,6 +25,7 @@ const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
     const [isEditTitle, setIsEditTitle] = useState(false);
     const [subTaskTitle, setSubTaskTitle] = useState('')
     const [taskTitle, setTaskTitle] = useState(title)
+    const [isLoadFile, setIsLoadFile] = useState(false)
     
     const addSubTask = () => {
         dispatch({
@@ -28,7 +33,9 @@ const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
             payload: {
                 id: window.crypto.randomUUID(),
                 taskId: id,
-                title: subTaskTitle
+                projectId,
+                title: subTaskTitle,
+                checked: false
             }
         })
         setSubTaskTitle('')
@@ -79,6 +86,11 @@ const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
                     <button className="close-modal-task" onClick={toggleTask}>x</button>
                 </div>
                 <div className="subtasks-wrapper">
+                    <div>
+                        <p>Сreated: {time.create}</p>
+                        <p>In Progress: {time.length}</p>
+                        <p>Completed: {time.create}</p>
+                    </div>
                     <h3>Description</h3>
                     {
                         isEditDescription
@@ -109,6 +121,15 @@ const ModalTask = ({ task: { description, id, title }, toggleTask }: Props) => {
                     <div className="subtask-form">
                         <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="add subtask" />
                         <button onClick={addSubTask}>add</button>
+                    </div>
+                    <div className="files">
+                        {isLoadFile
+                        ? <>
+                            <FileUpload/>
+                            <button onClick={() => setIsLoadFile(false)}>Close</button>
+                        </>
+                        : <button onClick={() => setIsLoadFile(true)}>Add file</button>
+                        }
                     </div>
                 </div>
             </div>
