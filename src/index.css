@@ -4,7 +4,7 @@
   font-weight: 400;
 }
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -13,6 +13,7 @@
 #root {
   max-width: 1280px;
   width: 100%;
+  margin: 0 auto;
   height: 100vh;
   padding: 2rem;
   text-align: center;
@@ -24,6 +25,7 @@ a:visited {
   text-decoration: inherit;
   color: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -43,28 +45,36 @@ h1 {
 
 input {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid #646cff;
   padding: 0.6em 1.2em;
+  width: 100%;
 }
 
-input:focus {
+input:hover {
+  box-shadow: 0px 0px 1px 1px #646cff;
+}
+
+input:focus:not([type="checkbox"]) {
   outline: 2px solid #646cff;
 }
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
+  background: #fff;
+  box-shadow: 0 2px 8px #00000050;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -89,6 +99,18 @@ button:focus-visible {
   border-radius: 12px;
 }
 
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  margin-block: 30px;
+}
+
+.back-to-projects {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .project a {
   width: 100%;
   height: 100%;
@@ -96,13 +118,14 @@ button:focus-visible {
   place-content: center;
 }
 
-.project-buttons {
+.buttons {
   display: flex;
   gap: 10px;
 }
+
 .tasks {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 10px;
 }
 
@@ -111,18 +134,28 @@ button:focus-visible {
   height: fit-content;
   padding: 10px;
   gap: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 3px 0px #040404;
+  border-radius: 5px;
+  border: 1px solid;
+  box-shadow: 0 2px 8px #00000014;
+  background-color: #fff;
 }
 
-.task {
+.task-item {
   display: flex;
-  background-color: gainsboro;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0 2px 8px #00000050;
   padding: 5px;
+  border-radius: 5px;
   gap: 10px;
+  cursor: pointer;
 }
 
-.modal-task {
+.task-item:hover {
+  box-shadow: 0 2px 8px #00000070;
+}
+
+.modal {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,35 +167,110 @@ button:focus-visible {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.modal-task-wrapper {
-  background-color: #f9f9f9;
-  width: 50%;
-  height: 50%;
+.task {
+  background: #ebecf0;
+  padding: 10px;
+  min-width: 50%;
 }
 
+.task-header {
+  display: flex;
+  justify-content: space-between;
+}
 .task-title {
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.task-title h2 {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.task-title:hover h2 {
+  background: #00000030;
+}
+
+.close-modal {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-content: center;
+}
+
+.file-upload {
+  display: flex;
+  gap: 10px;
+}
+
+.files-form {
+  display: grid;
+  gap: 10px;
+}
+
+.files {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.task-item h2 {
   flex: 1 1 0;
+}
+
+.task-description {
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.task-description:hover {
+  background: #00000030;
 }
 
 .add-task {
   align-self: end;
 }
 
-.subtask-wrapper {
+.subtasks-wrapper {
   display: grid;
-  place-items: flex-start;
   padding: 10px;
-  gap: 10px;
+  gap: 20px;
 }
 
 .subtask {
-  display: flex;
+  display: grid;
+  grid-template-columns: 10% 1fr 15%;
+  align-items: center;
+  justify-items: center;
   gap: 10px;
   width: 100%;
 }
 
-.subtask-checkbox:checked + span {
+.subtask-description-form {
+  display: grid;
+  gap: 10px;
+  place-items: flex-start;
+}
+
+.subtask-title {
+  justify-self: flex-start;
+}
+
+.subtask-checkbox {
+  width: 50%;
+  height: 50%;
+  padding: 10px;
+}
+
+.subtask-checkbox:checked+span {
   text-decoration: line-through;
+}
+
+.subtask-form {
+  display: flex;
+  gap: 10px;
 }
 
 .queue,
@@ -172,13 +280,13 @@ button:focus-visible {
 }
 
 .queue {
-  border-color: gray;
+  border-color: #d3d3d3;
 }
 
 .development {
-  border-color: yellow;
+  border-color: #f9d900;
 }
 
 .done {
-  border-color: green;
+  border-color: #6bc950;
 }
