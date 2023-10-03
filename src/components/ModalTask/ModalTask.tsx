@@ -97,7 +97,7 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks }, to
                                 <Editor
                                     apiKey="fa6f7nl0i6n48irja1r7k22b6adlgwzng7venrfuaf2vazmq"
                                     initialValue={description || 'No discription'}
-                                    onInit={(evt, editor) => editorRef.current = editor}
+                                    onInit={(_, editor) => editorRef.current = editor}
                                     onDirty={() => setDirty(true)}
                                 />
                                 <div className="buttons">
