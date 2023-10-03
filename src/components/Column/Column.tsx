@@ -26,7 +26,7 @@ const Column = ({ projectId, title, tasks, }: Props) => {
             title: value,
             time: {
                 create: new Date().toDateString(),
-                finish: ''
+                finish: title === 'Done' ? new Date().toDateString(): ''
             }
         }
         dispatch({

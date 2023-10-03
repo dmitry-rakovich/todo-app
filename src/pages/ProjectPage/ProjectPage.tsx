@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { InitialState, Project, Task } from "../../types"
 import Column from "../../components/Column/Column"
+import Search from "../../components/Search/Search"
 
 
 
@@ -12,13 +13,13 @@ const ProjectPage = () => {
   const dispatch = useDispatch()
   const { id } = useParams() as {id: string}
   const project = useSelector<InitialState, Project|undefined>((state) => state.projects.find(project => project.id === id))
-  const alltasks = useSelector<InitialState, Task[]>((state) => state.tasks)
-  const tasks = alltasks.filter(task => task.projectId === id)
+  const allTasks = useSelector<InitialState, Task[]>((state) => state.tasks)
+  const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
 
   useEffect(() => {
     if(!project) navigate('/')
-
-  }, [id])
+    setFilteredTasks(allTasks)
+  },[id, project, allTasks])
   
   const deleteProject = () => {
     dispatch({
@@ -64,6 +65,7 @@ const ProjectPage = () => {
       <button className="back-to-projects" onClick={() => navigate('/')}>Back to all projects</button>
       <div className="project-header">
         <h2>Project: {project?.title}</h2>
+        <Search setFilteredTasks={setFilteredTasks} allTasks={allTasks} />
         <button onClick={deleteProject}>Delete project</button>
       </div>
       <div className="tasks">
@@ -71,7 +73,7 @@ const ProjectPage = () => {
           <Droppable droppableId="Queue">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <Column projectId={id} title={'Queue'} tasks={tasks.filter(task => task.column === 'Queue')}/>
+                <Column projectId={id} title={'Queue'} tasks={filteredTasks.filter(task => task.column === 'Queue')}/>
                 {provided.placeholder}
               </div>
             )}
@@ -79,7 +81,7 @@ const ProjectPage = () => {
           <Droppable droppableId="Development">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <Column projectId={id} title={'Development'} tasks={tasks.filter(task => task.column === 'Development')}/>
+                <Column projectId={id} title={'Development'} tasks={filteredTasks.filter(task => task.column === 'Development')}/>
                 {provided.placeholder}
               </div>
             )}
@@ -87,7 +89,7 @@ const ProjectPage = () => {
           <Droppable droppableId="Done">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <Column projectId={id} title={'Done'} tasks={tasks.filter(task => task.column === 'Done')}/>
+                <Column projectId={id} title={'Done'} tasks={filteredTasks.filter(task => task.column === 'Done')}/>
                 {provided.placeholder}
               </div>
             )}
