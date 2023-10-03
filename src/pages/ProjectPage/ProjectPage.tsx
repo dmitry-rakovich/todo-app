@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import { DragDropContext, DragUpdate, Droppable } from "react-beautiful-dnd"
 import { InitialState, Project, Task } from "../../types"
 import Column from "../../components/Column/Column"
 import Search from "../../components/Search/Search"
@@ -29,7 +29,7 @@ const ProjectPage = () => {
     navigate('/')
   }
 
-  const onDragEnd = ({ source, destination }) => {
+  const onDragEnd = ({ source, destination }: DragUpdate) => {
     if (!destination) {
       return;
     }
