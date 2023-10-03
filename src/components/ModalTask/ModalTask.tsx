@@ -64,6 +64,7 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks }, to
                 title: taskTitle
             }
         })
+        setIsEditTitle(false)
     }
 
     return (
