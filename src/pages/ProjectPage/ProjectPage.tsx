@@ -12,7 +12,7 @@ const ProjectPage = () => {
   const dispatch = useDispatch()
   const { id } = useParams() as {id: string}
   const project = useSelector<InitialState, Project|undefined>((state) => state.projects.find(project => project.id === id))
-  const alltasks = useSelector<InitialState, Task[]>((state) => state.tasks)     
+  const alltasks = useSelector<InitialState, Task[]>((state) => state.tasks)
   const tasks = alltasks.filter(task => task.projectId === id)
 
   useEffect(() => {

@@ -1,9 +1,8 @@
 import { useRef, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { File, InitialState, SubTask, Task } from "../../types"
+import { useDispatch } from "react-redux"
+import { Task } from "../../types"
 import SubTaskItem from "../SubtaskItem/SubTaskItem"
 import { Editor } from '@tinymce/tinymce-react'
-import { useParams } from "react-router-dom"
 import FileUpload from "../FileUpload"
 import { getDateDiff } from "../../utils"
 
@@ -11,16 +10,12 @@ type Props = {
     task: Task,
     toggleTask: React.MouseEventHandler<HTMLButtonElement>
 }
-const ModalTask = ({ task: { description, id, title, time }, toggleTask }: Props) => {
+const ModalTask = ({ task: { description, id, title, time, files, subtasks }, toggleTask }: Props) => {
 
     const dispatch = useDispatch()
-    const { id: projectId } = useParams()
 
     const editorRef = useRef(null);
     const inputRef = useRef<HTMLInputElement>(null)
-
-    const subTasks = useSelector<InitialState, SubTask[]>((state) => state.subtasks)
-    const files = useSelector<InitialState, File[]>((state) => state.tasks.find(task => task.id === id)?.files)
 
     const [dirty, setDirty] = useState(false);
     const [isEditDescription, setIsEditDescription] = useState(false);
@@ -33,11 +28,12 @@ const ModalTask = ({ task: { description, id, title, time }, toggleTask }: Props
         dispatch({
             type: "ADD_SUBTASK",
             payload: {
-                id: window.crypto.randomUUID(),
                 taskId: id,
-                projectId,
-                title: subTaskTitle,
-                checked: false
+                subtask: {
+                    id: window.crypto.randomUUID(),
+                    title: subTaskTitle,
+                    checked: false
+                }
             }
         })
         setSubTaskTitle('')
@@ -118,7 +114,7 @@ const ModalTask = ({ task: { description, id, title, time }, toggleTask }: Props
 
                     <h3>Subtasks</h3>
                     {
-                        subTasks.map(subtask => <SubTaskItem key={subtask.id} {...subtask} />)
+                        subtasks.map(subtask => <SubTaskItem key={subtask.id} taskId={id} subtask={subtask} />)
                     }
                     <div className="subtask-form">
                         <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="add subtask" />

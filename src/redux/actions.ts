@@ -11,7 +11,6 @@ const deleteProject = (state: InitialState, action) => {
         ...state,
         projects: state.projects.filter(project => project.id !== action.payload),
         tasks: state.tasks.filter(task => task.projectId !== action.payload),
-        subtasks: state.subtasks.filter(subtask => subtask.projectId !== action.payload)
     }
     localStorage.setItem('todo-app', JSON.stringify(newState))
     return newState
@@ -48,20 +47,28 @@ const addTaskDescription = (state: InitialState, action) => {
 }
 
 const addSubTask = (state: InitialState, action) => {
-    const newState = {...state, subtasks: [...state.subtasks, action.payload]}
+    const task = state.tasks.find(task => task.id === action.payload.taskId)
+    task?.subtasks.push(action.payload.subtask)
+    localStorage.setItem('todo-app', JSON.stringify(state))
+    return state
+}
+
+const deleteSubTask = (state: InitialState, action) => {
+    const task = state.tasks.find(task => task.id === action.payload.taskId)!
+    const index = task.subtasks.findIndex(subtask => subtask.id === action.payload.subtaskId)
+    
+    const newState = {...state, tasks: state.tasks.map(task => {        
+        task.subtasks.splice(index, 1)
+        return task
+    })}    
     localStorage.setItem('todo-app', JSON.stringify(newState))
     return newState
 }
 
-const deleteSubTask = (state: InitialState, action) => {   
-    const newState = {...state, subtasks: state.subtasks.filter(subtask => subtask.id !== action.payload)}
-    localStorage.setItem('todo-app', JSON.stringify(newState))
-    return newState
-}
-
-const checkSubTask = (state: InitialState, action) => {   
-    const subtask = state.subtasks.find(subtask => subtask.id === action.payload.id)
-    subtask.checked = action.payload.checked
+const checkSubTask = (state: InitialState, action) => {
+    const task = state.tasks.find(task => task.id === action.payload.taskId)
+    const subtask = task?.subtasks.find(subtask => subtask.id === action.payload.subtaskId)
+    subtask!.checked = action.payload.checked
     localStorage.setItem('todo-app', JSON.stringify(state))
     return state
 }

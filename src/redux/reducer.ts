@@ -13,7 +13,7 @@ import {
     addFile
 } from "./actions"
 
-const initialState: InitialState = JSON.parse(localStorage.getItem('todo-app')!) || {projects:[], tasks:[], subtasks: [], comments:[]}
+const initialState: InitialState = JSON.parse(localStorage.getItem('todo-app')!) || {projects:[], tasks:[]}
 
 
 const reducer = (state = initialState, action) => {

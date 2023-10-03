@@ -2,13 +2,20 @@ import { useDispatch } from "react-redux"
 import { SubTask } from "../../types"
 import { useState } from "react"
 
-const SubTaskItem = ({ id, title, checked }: SubTask) => {
+type Props = {
+  taskId: string,
+  subtask: SubTask
+}
+const SubTaskItem = ({ subtask: {id, checked, title}, taskId }: Props) => {
   const dispatch = useDispatch()
   const [isChecked, setIsChecked] = useState(checked)
   const deleteSubTask = (subTaskId: string) => {
     dispatch({
       type: "DELETE_SUBTASK",
-      payload: subTaskId
+      payload: {
+        taskId,
+        subTaskId
+      }
     })
   }
 
@@ -17,7 +24,8 @@ const SubTaskItem = ({ id, title, checked }: SubTask) => {
     dispatch({
       type: "CHECK_SUBTASK",
       payload: {
-        id,
+        taskId,
+        subtaskId: id,
         checked: !isChecked
       }
     })

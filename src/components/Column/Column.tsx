@@ -9,19 +9,20 @@ type Props = {
     tasks: Task[]
 }
 
-const Column = ({ projectId, title, tasks }: Props) => {
+const Column = ({ projectId, title, tasks, }: Props) => {
 
     const dispatch = useDispatch()
 
     const [value, setValue] = useState('')
     const addNewTask = () => {
 
-        const newTask:Task = {
+        const newTask: Task = {
             column: title,
             id: window.crypto.randomUUID(),
             projectId,
             subtasks: [],
             files: [],
+            comments: [],
             title: value,
             time: {
                 create: new Date().toDateString(),
@@ -35,7 +36,7 @@ const Column = ({ projectId, title, tasks }: Props) => {
         setValue('')
     }
 
-    
+
     return (
         <div className={`column ${title.toLowerCase()}`}>
             <h2>{title}</h2>
@@ -43,7 +44,7 @@ const Column = ({ projectId, title, tasks }: Props) => {
                 !!tasks.length &&
                 <>
                     {
-                        tasks.map((task, index) => <TaskItem key={task.id} index={index} task={task}/>
+                        tasks.map((task, index) => <TaskItem key={task.id} index={index} task={task} />
                         )
                     }
                 </>
