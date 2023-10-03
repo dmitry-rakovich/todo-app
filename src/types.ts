@@ -17,6 +17,7 @@ export type Task = {
     description: string,
     column: 'Queue' | 'Development' | 'Done',
     subtasks: SubTask[],
+    files: File[],
     time: Time,
     priopity: 'Low' | 'Medium' | 'High' 
 }
@@ -33,4 +34,11 @@ export type SubTask = {
     projectId: string,
     title: string,
     checked: boolean
+}
+
+export type File = {
+    id: string,
+    taskId: string,
+    name: string,
+    path: string
 }

@@ -21,6 +21,7 @@ const Column = ({ projectId, title, tasks }: Props) => {
             id: window.crypto.randomUUID(),
             projectId,
             subtasks: [],
+            files: [],
             title: value,
             time: {
                 create: new Date().toDateString(),
@@ -38,7 +39,7 @@ const Column = ({ projectId, title, tasks }: Props) => {
     
     return (
         <div className={`column ${title.toLowerCase()}`}>
-            <h1>{title}</h1>
+            <h2>{title}</h2>
             {
                 !!tasks.length &&
                 <>
@@ -49,7 +50,7 @@ const Column = ({ projectId, title, tasks }: Props) => {
                 </>
             }
             <input autoFocus value={value} onChange={(e) => setValue(e.target.value)} placeholder='Add new task' />
-            <button onClick={addNewTask}>Add</button>
+            <button disabled={!value.trim()} onClick={addNewTask}>Add</button>
         </div>
     )
 }

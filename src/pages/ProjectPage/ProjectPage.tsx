@@ -63,7 +63,7 @@ const ProjectPage = () => {
     <>
       <button className="back-to-projects" onClick={() => navigate('/')}>Back to all projects</button>
       <div className="project-header">
-        <h1>Project: {project?.title}</h1>
+        <h2>Project: {project?.title}</h2>
         <button onClick={deleteProject}>Delete project</button>
       </div>
       <div className="tasks">

@@ -9,7 +9,8 @@ import {
     addSubTask,
     deleteSubTask,
     checkSubTask,
-    refreshTasks
+    refreshTasks,
+    addFile
 } from "./actions"
 
 const initialState: InitialState = JSON.parse(localStorage.getItem('todo-app')!) || {projects:[], tasks:[], subtasks: [], comments:[]}
@@ -36,6 +37,8 @@ const reducer = (state = initialState, action) => {
         case 'CHECK_SUBTASK': return checkSubTask(state, action)
 
         case 'REFRESH_TASKS': return refreshTasks(state, action)
+
+        case 'ADD_FILE': return addFile(state, action)
         
         default: {
             return state

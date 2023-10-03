@@ -33,8 +33,8 @@ const TaskItem = ({task, index}: Props) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <div className='task' onClick={toggleTask}>
-              <h2 className='task-title'>{task.title}</h2>
+            <div className='task-item' onClick={toggleTask} title="Click to open task">
+              <h2>{task.title}</h2>
               <button onClick={() => deleteTask(task.id)}>Delete</button>
             </div>
           </div>

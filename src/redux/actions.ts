@@ -66,6 +66,17 @@ const checkSubTask = (state: InitialState, action) => {
     return state
 }
 
+const addFile = (state: InitialState, action) => {
+    const task = state.tasks.find(task => task.id === action.payload.taskId)
+    task?.files.push({
+        id: action.payload.id,
+        taskId: action.payload.taskId,
+        path: action.payload.path,
+        name: action.payload.name
+    })
+    localStorage.setItem('todo-app', JSON.stringify(state))
+    return state
+}
 const refreshTasks = (state: InitialState, action) => {
     const {currentList, currentIndex, targetList, targetIndex} = action.payload
 
@@ -90,4 +101,16 @@ const refreshTasks = (state: InitialState, action) => {
     return newState
 }
 
-export {addProject, deleteProject, addTask, deleteTask, saveTaskTitle, addSubTask, deleteSubTask, checkSubTask, addTaskDescription, refreshTasks}
+export {
+    addProject,
+    deleteProject,
+    addTask,
+    deleteTask,
+    saveTaskTitle,
+    addSubTask,
+    deleteSubTask,
+    checkSubTask,
+    addTaskDescription,
+    refreshTasks,
+    addFile
+}
