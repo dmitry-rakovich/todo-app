@@ -5,6 +5,7 @@ import SubTaskItem from "../SubtaskItem/SubTaskItem"
 import { Editor } from '@tinymce/tinymce-react'
 import { useParams } from "react-router-dom"
 import FileUpload from "../FileUpload"
+import { getDateDiff } from "../../utils"
 
 type Props = {
     task: Task,
@@ -89,8 +90,8 @@ const ModalTask = ({ task: { description, id, title, time }, toggleTask }: Props
                 <div className="subtasks-wrapper">
                     <div>
                         <p>Сreated: {time.create}</p>
-                        <p>In Progress: {time.length}</p>
-                        <p>Completed: {time.create}</p>
+                        <p>In Progress: {getDateDiff(time.finish || new Date(), time.create)}</p>
+                        {time.finish && <p>Completed: {time.finish}</p>}
                     </div>
                     <h3>Description</h3>
                     {

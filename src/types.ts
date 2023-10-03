@@ -24,7 +24,6 @@ export type Task = {
 
 export type Time = {
     create: string,
-    length: string,
     finish: string
 }
 

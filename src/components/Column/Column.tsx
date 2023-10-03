@@ -25,7 +25,6 @@ const Column = ({ projectId, title, tasks }: Props) => {
             title: value,
             time: {
                 create: new Date().toDateString(),
-                length: '',
                 finish: ''
             }
         }

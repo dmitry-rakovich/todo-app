@@ -85,7 +85,13 @@ const refreshTasks = (state: InitialState, action) => {
     const otherColumn = state.tasks.filter(task => task.column !== targetList && task.column !== currentList)
     
     const currentTask = currentColumn[currentIndex]
-    currentTask.column = targetList    
+    if(currentTask.column === 'Done') {
+        currentTask.time.finish = ''
+    }
+    currentTask.column = targetList
+    if(currentTask.column === 'Done') {
+        currentTask.time.finish = new Date().toDateString()
+    }
 
     let newState:InitialState
     if(currentList !== targetList) {
