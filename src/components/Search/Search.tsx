@@ -5,7 +5,7 @@ type Props = {
   allTasks: Task[]
 }
 const Search = ({setFilteredTasks, allTasks}: Props) => {
-    const handleSearch = (e) => {
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       const filteredTasks = allTasks.filter(task => task.title.includes(e.target.value))
       setFilteredTasks(filteredTasks)
     }

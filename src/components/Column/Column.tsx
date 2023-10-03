@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Task } from '../../types'
+import { Column as TypeColumn, Task } from '../../types'
 import TaskItem from '../TaskItem/TaskItem'
 
 type Props = {
     projectId: string,
-    title: string,
+    title: TypeColumn,
     tasks: Task[]
 }
 
@@ -27,7 +27,8 @@ const Column = ({ projectId, title, tasks, }: Props) => {
             time: {
                 create: new Date().toDateString(),
                 finish: title === 'Done' ? new Date().toDateString(): ''
-            }
+            },
+            description: ''
         }
         dispatch({
             type: "ADD_TASK",

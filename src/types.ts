@@ -13,11 +13,10 @@ export type Task = {
     projectId: string,
     title: string,
     description: string,
-    column: 'Queue' | 'Development' | 'Done',
+    column: Column,
     subtasks: SubTask[],
     files: File[],
     time: Time,
-    priopity: 'Low' | 'Medium' | 'High',
     comments: Comment[]
 }
 
@@ -46,3 +45,5 @@ export type Comment = {
     text: string,
     comments?: Comment[]
 }
+
+export type Column = 'Queue' | 'Development' | 'Done'

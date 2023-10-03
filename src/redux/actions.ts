@@ -1,12 +1,11 @@
-import { InitialState } from "../types"
-
-const addProject = (state: InitialState, action) => {
+import { Column, InitialState, Project, SubTask, Task } from "../types"
+const addProject = (state: InitialState, action: {payload: Project}) => {
     const newState = {...state, projects: [...state.projects, action.payload]}
     localStorage.setItem('todo-app', JSON.stringify(newState))
     return newState
 }
 
-const deleteProject = (state: InitialState, action) => {
+const deleteProject = (state: InitialState, action: {payload: string}) => {
     const newState = {
         ...state,
         projects: state.projects.filter(project => project.id !== action.payload),
@@ -16,26 +15,30 @@ const deleteProject = (state: InitialState, action) => {
     return newState
 }
 
-const addTask = (state: InitialState, action) => {
+const addTask = (state: InitialState, action: {payload: Task}) => {
     const newState = {...state, tasks: [...state.tasks, action.payload]}
     localStorage.setItem('todo-app', JSON.stringify(newState))
     return newState
 }
 
-const deleteTask = (state: InitialState, action) => {
+const deleteTask = (state: InitialState, action: {payload: string}) => {
     const newState = {...state, tasks: state.tasks.filter(task => task.id !== action.payload)}
     localStorage.setItem('todo-app', JSON.stringify(newState))
     return newState
 }
 
-const saveTaskTitle = (state: InitialState, action) => {
-    const task = state.tasks.find(task => task.id === action.payload.id)!
-    task.title = action.payload.title
-    localStorage.setItem('todo-app', JSON.stringify(state))
-    return state
+const saveTaskTitle = (state: InitialState, action: {payload: {id: string,title: string}}) => {
+    const newState = {...state, tasks: state.tasks.map(task => {
+        if(task.id === action.payload.id) {
+            task.title = action.payload.title
+        }
+        return task
+    })}
+    localStorage.setItem('todo-app', JSON.stringify(newState))
+    return newState
 }
 
-const addTaskDescription = (state: InitialState, action) => {
+const addTaskDescription = (state: InitialState, action: {payload: {id: string, description: string}}) => {
     const newState = {...state, tasks: state.tasks.map(task => {
         if(task.id === action.payload.id) {
             task.description = action.payload.description
@@ -46,14 +49,18 @@ const addTaskDescription = (state: InitialState, action) => {
     return newState
 }
 
-const addSubTask = (state: InitialState, action) => {
-    const task = state.tasks.find(task => task.id === action.payload.taskId)
-    task?.subtasks.push(action.payload.subtask)
-    localStorage.setItem('todo-app', JSON.stringify(state))
-    return state
+const addSubTask = (state: InitialState, action: {payload: {taskId: string, subtask: SubTask}}) => {
+    const newState = {...state, tasks: state.tasks.map(task => {
+        if(task.id === action.payload.taskId) {
+            task.subtasks = [...task.subtasks, action.payload.subtask]
+        }
+        return task
+    })}
+    localStorage.setItem('todo-app', JSON.stringify(newState))
+    return newState
 }
 
-const deleteSubTask = (state: InitialState, action) => {
+const deleteSubTask = (state: InitialState, action: {payload: {taskId: string, subtaskId: string}}) => {
     const task = state.tasks.find(task => task.id === action.payload.taskId)!
     const index = task.subtasks.findIndex(subtask => subtask.id === action.payload.subtaskId)
     
@@ -65,26 +72,38 @@ const deleteSubTask = (state: InitialState, action) => {
     return newState
 }
 
-const checkSubTask = (state: InitialState, action) => {
-    const task = state.tasks.find(task => task.id === action.payload.taskId)
-    const subtask = task?.subtasks.find(subtask => subtask.id === action.payload.subtaskId)
-    subtask!.checked = action.payload.checked
-    localStorage.setItem('todo-app', JSON.stringify(state))
-    return state
+const checkSubTask = (state: InitialState, action: {payload: {taskId: string, subtaskId: string, checked: boolean}}) => {
+    const newState = {...state, tasks: state.tasks.map(task => {        
+        if(task.id === action.payload.taskId) {
+            task.subtasks.map(subtask => {
+                if(subtask.id === action.payload.subtaskId){
+                    subtask.checked = action.payload.checked
+                }
+                return subtask
+            })
+        }
+        return task
+    })} 
+    localStorage.setItem('todo-app', JSON.stringify(newState))
+    return newState
 }
 
-const addFile = (state: InitialState, action) => {
-    const task = state.tasks.find(task => task.id === action.payload.taskId)
-    task?.files.push({
-        id: action.payload.id,
-        taskId: action.payload.taskId,
-        path: action.payload.path,
-        name: action.payload.name
-    })
-    localStorage.setItem('todo-app', JSON.stringify(state))
-    return state
+const addFile = (state: InitialState, action: {payload: {id: string, taskId: string, name: string, path: string,}}) => {
+    const newState = {...state, tasks: state.tasks.map(task => {        
+        if(task.id === action.payload.taskId) {
+            task.files = [...task.files, {id: action.payload.id, name: action.payload.name, path: action.payload.path, taskId: action.payload.taskId}]
+        }
+        return task
+    })} 
+    localStorage.setItem('todo-app', JSON.stringify(newState))
+    return newState
 }
-const refreshTasks = (state: InitialState, action) => {
+const refreshTasks = (state: InitialState, action:{ payload: {
+    currentList: Column,
+    currentIndex: number,
+    targetList: Column,
+    targetIndex: number,
+  }}) => {
     const {currentList, currentIndex, targetList, targetIndex} = action.payload
 
     const currentColumn = state.tasks.filter(task => task.column === currentList)
