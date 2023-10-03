@@ -1,8 +1,6 @@
 export type InitialState = {
     projects: Project[],
-    tasks: Task[],
-    subtasks: SubTask[],
-    comments: []
+    tasks: Task[]
 }
 
 export type Project = {
@@ -19,7 +17,8 @@ export type Task = {
     subtasks: SubTask[],
     files: File[],
     time: Time,
-    priopity: 'Low' | 'Medium' | 'High' 
+    priopity: 'Low' | 'Medium' | 'High',
+    comments: Comment[]
 }
 
 export type Time = {
@@ -40,4 +39,10 @@ export type File = {
     taskId: string,
     name: string,
     path: string
+}
+
+export type Comment = {
+    id: string,
+    text: string,
+    comments?: Comment[]
 }
