@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start":"concurrently  \"npm run dev\" \"cd server && npm run server\"",
+    "start": "concurrently  \"npm run dev\" \"cd server && npm run server\"",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "@tinymce/tinymce-react": "^4.3.0",
+    "@types/tinymce": "^4.6.6",
     "axios": "^1.5.1",
     "concurrently": "^8.2.1",
     "dayjs": "^1.11.10",

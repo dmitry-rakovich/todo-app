@@ -5,7 +5,7 @@ import SubTaskItem from "../SubtaskItem/SubTaskItem"
 import { Editor } from '@tinymce/tinymce-react'
 import FileUpload from "../FileUpload"
 import { getDateDiff } from "../../utils"
-
+import { Editor as TypeEditor } from "tinymce"
 type Props = {
     task: Task,
     toggleTask: React.MouseEventHandler<HTMLButtonElement>
@@ -14,9 +14,9 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks }, to
 
     const dispatch = useDispatch()
 
-    const editorRef = useRef(null);
     const inputRef = useRef<HTMLInputElement>(null)
-
+    const [editorRef, setEditorRef] = useState<TypeEditor>()
+    
     const [dirty, setDirty] = useState(false);
     const [isEditDescription, setIsEditDescription] = useState(false);
     const [isEditTitle, setIsEditTitle] = useState(false);
@@ -41,18 +41,17 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks }, to
     }
 
     const saveDescription = () => {
-        if (editorRef.current) {            
-            const content = editorRef.current.getContent();
+        if (editorRef) {            
             setDirty(false);
             setIsEditDescription(false)
-            editorRef.current.setDirty(false);
+            editorRef.setDirty(false);
             dispatch({
                 type: "ADD_TASK_DESCRIPTION",
                 payload: {
                     id,
-                    description: content
+                    description: editorRef.getContent()
                 }
-            })
+            })            
         }
     };
 
@@ -96,8 +95,8 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks }, to
                             ? <>
                                 <Editor
                                     apiKey="fa6f7nl0i6n48irja1r7k22b6adlgwzng7venrfuaf2vazmq"
-                                    initialValue={description || 'No discription'}
-                                    onInit={(_, editor) => editorRef.current = editor}
+                                    initialValue={description || 'No description'}
+                                    onInit={(_, editor) => setEditorRef(editor)}
                                     onDirty={() => setDirty(true)}
                                 />
                                 <div className="buttons">
@@ -109,7 +108,7 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks }, to
                                 className="task-description"
                                 title="Click to edit description"
                                 onClick={() => setIsEditDescription(true)}
-                                dangerouslySetInnerHTML={{__html: editorRef?.current ? editorRef.current.getContent() : description || 'No description'}}
+                                dangerouslySetInnerHTML={{__html: description ||  'No description'}}
                             />
                     }
 
