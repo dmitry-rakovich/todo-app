@@ -15,14 +15,14 @@ function FileUpload({taskId, handleClose}: Props) {
   const uploadFile = () => {
     const formData = new FormData();
     formData.append('file', file!);
-    axios.post('http://localhost:4500/upload', formData).then(res => {
+    axios.post('https://todo-app-lyart-eta-55.vercel.app/upload', formData).then(res => {
       dispatch({
         type: "ADD_FILE",
         payload: {
           id: window.crypto.randomUUID(),
           taskId,
           name: res.data.name,
-          path: 'http://localhost:5173' + res.data.path
+          path: 'https://todo-app-lyart-eta-55.vercel.app/' + res.data.path
         }
       })
       handleClose(false)
