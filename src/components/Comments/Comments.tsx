@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Comment } from "../../types";
+import { Comment } from "../../types/DataTypes";
 
 const Comments = (comment: Comment) => {
   const [text, setText] = useState('')

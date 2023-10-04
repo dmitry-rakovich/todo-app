@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { SubTask } from "../../types"
+import { SubTask } from "../../types/DataTypes"
 import { useState } from "react"
 
 type Props = {

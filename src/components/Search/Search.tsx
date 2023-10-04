@@ -1,4 +1,4 @@
-import { Task } from "../../types"
+import { Task } from "../../types/DataTypes"
 
 type Props = {
   setFilteredTasks: React.Dispatch<React.SetStateAction<Task[]>>,

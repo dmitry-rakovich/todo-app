@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { InitialState, Project} from "../../types"
+import { InitialState, Project} from "../../types/DataTypes"
 
 const Projects = () => {
 

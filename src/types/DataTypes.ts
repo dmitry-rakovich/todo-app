@@ -1,4 +1,4 @@
-export type InitialState = {
+export type State = {
     projects: Project[],
     tasks: Task[]
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { DragDropContext, DragUpdate, Droppable } from "react-beautiful-dnd"
-import { InitialState, Project, Task } from "../../types"
+import { InitialState, Project, Task } from "../../types/DataTypes"
 import Column from "../../components/Column/Column"
 import Search from "../../components/Search/Search"
 

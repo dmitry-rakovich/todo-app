@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import { useDispatch } from "react-redux"
-import { Task } from "../../types"
+import { Task } from "../../types/DataTypes"
 import SubTaskItem from "../SubtaskItem/SubTaskItem"
 import { Editor } from '@tinymce/tinymce-react'
 import FileUpload from "../FileUpload"

@@ -1,44 +1,138 @@
-import { InitialState } from "../types"
-import {
-    addProject,
-    deleteProject,
-    addTask,
-    deleteTask,
-    addTaskDescription,
-    saveTaskTitle,
-    addSubTask,
-    deleteSubTask,
-    checkSubTask,
-    refreshTasks,
-    addFile
-} from "./actions"
+import { State } from "../types/DataTypes"
+import { Actions, ActionTypes } from "../types/ActionsTypes"
 
-const initialState: InitialState = JSON.parse(localStorage.getItem('todo-app')!) || {projects:[], tasks:[]}
+const initialState: State = JSON.parse(localStorage.getItem('todo-app')!) || {projects:[], tasks:[]}
 
-
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: Actions): State => {
     switch (action.type) {
-        case 'ADD_PROJECT': return addProject(state, action)
+        case ActionTypes.ADD_PROJECT: {
+            const newState = {...state, projects: [...state.projects, action.payload]}
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
 
-        case 'DELETE_PROJECT': return deleteProject(state, action)
+        case ActionTypes.DELETE_PROJECT: {
+            const newState = {
+                ...state,
+                projects: state.projects.filter(project => project.id !== action.payload),
+                tasks: state.tasks.filter(task => task.projectId !== action.payload),
+            }
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
 
-        case 'ADD_TASK': return addTask(state, action)
+        case ActionTypes.ADD_TASK: {
+            const newState = {...state, tasks: [...state.tasks, action.payload]}
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
 
-        case 'DELETE_TASK': return deleteTask(state, action)
+        case ActionTypes.DELETE_TASK: {
+            const newState = {...state, tasks: state.tasks.filter(task => task.id !== action.payload)}
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
 
-        case 'SAVE_TASK_TITLE': return saveTaskTitle(state, action)
+        case ActionTypes.SAVE_TASK_TITLE: {
+            const newState = {...state, tasks: state.tasks.map(task => {
+                if(task.id === action.payload.id) {
+                    task.title = action.payload.title
+                }
+                return task
+            })}
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
+        
+        case ActionTypes.ADD_TASK_DESCRIPTION: {
+            const newState = {...state, tasks: state.tasks.map(task => {
+                if(task.id === action.payload.id) {
+                    task.description = action.payload.description
+                }
+                return task
+            })}
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
 
-        case 'ADD_TASK_DESCRIPTION': return addTaskDescription(state, action)
+        case ActionTypes.ADD_SUBTASK: {
+            const newState = {...state, tasks: state.tasks.map(task => {
+                if(task.id === action.payload.taskId) {
+                    task.subtasks = [...task.subtasks, action.payload.subtask]
+                }
+                return task
+            })}
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
 
-        case 'ADD_SUBTASK': return addSubTask(state, action)
+        case ActionTypes.DELETE_SUBTASK: {
+            const task = state.tasks.find(task => task.id === action.payload.taskId)!
+            const index = task.subtasks.findIndex(subtask => subtask.id === action.payload.subtaskId)
+            const newState = {...state, tasks: state.tasks.map(task => {        
+                task.subtasks.splice(index, 1)
+                return task
+            })}    
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
 
-        case 'DELETE_SUBTASK': return deleteSubTask(state, action)
+        case ActionTypes.CHECK_SUBTASK: {
+            const newState = {...state, tasks: state.tasks.map(task => {        
+                if(task.id === action.payload.taskId) {
+                    task.subtasks.map(subtask => {
+                        if(subtask.id === action.payload.subtaskId){
+                            subtask.checked = action.payload.checked
+                        }
+                        return subtask
+                    })
+                }
+                return task
+            })} 
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
+        
+        case ActionTypes.ADD_FILE: {
+            const newState = {...state, tasks: state.tasks.map(task => {        
+                if(task.id === action.payload.taskId) {
+                    task.files = [...task.files, {id: action.payload.id, name: action.payload.name, path: action.payload.path, taskId: action.payload.taskId}]
+                }
+                return task
+            })} 
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
 
-        case 'CHECK_SUBTASK': return checkSubTask(state, action)
+        case ActionTypes.REFRESH_TASKS: {
+            const {currentList, currentIndex, targetList, targetIndex} = action.payload
 
-        case 'REFRESH_TASKS': return refreshTasks(state, action)
+            const currentColumn = state.tasks.filter(task => task.column === currentList)
+            const targetColumn = state.tasks.filter(task => task.column === targetList)
+            const otherColumn = state.tasks.filter(task => task.column !== targetList && task.column !== currentList)
+            
+            const currentTask = currentColumn[currentIndex]
+            if(currentTask.column === 'Done') {
+                currentTask.time.finish = ''
+            }
+            currentTask.column = targetList
+            if(currentTask.column === 'Done') {
+                currentTask.time.finish = new Date().toDateString()
+            }
 
-        case 'ADD_FILE': return addFile(state, action)
+            let newState:State
+            if(currentList !== targetList) {
+                currentColumn.splice(currentIndex, 1)
+                targetColumn.splice(targetIndex, 0, currentTask)
+                newState = {...state, tasks: [...currentColumn, ...targetColumn, ...otherColumn]}
+            } else {
+                currentColumn.splice(currentIndex, 1)
+                currentColumn.splice(targetIndex, 0, currentTask)
+                newState = {...state, tasks: [...currentColumn, ...otherColumn]}
+            }
+            localStorage.setItem('todo-app', JSON.stringify(newState))
+            return newState
+        }
         
         default: {
             return state

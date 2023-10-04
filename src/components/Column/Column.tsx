@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Column as TypeColumn, Task } from '../../types'
+import { Column as TypeColumn, Task } from '../../types/DataTypes'
 import TaskItem from '../TaskItem/TaskItem'
 
 type Props = {

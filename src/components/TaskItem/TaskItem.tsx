@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
 import { useState } from "react"
-import { Task } from "../../types"
+import { Task } from "../../types/DataTypes"
 import ModalTask from "../ModalTask/ModalTask"
 import { Draggable } from "react-beautiful-dnd"
 type Props = {
