@@ -1,12 +1,12 @@
 import { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { InitialState, Project} from "../../types/DataTypes"
+import { State, Project} from "../../types/DataTypes"
 
 const Projects = () => {
 
     const ref = useRef<HTMLInputElement>(null)
-    const projects = useSelector<InitialState, Project[]>(state => state.projects)
+    const projects = useSelector<State, Project[]>(state => state.projects)
 
     const dispatch = useDispatch()
 

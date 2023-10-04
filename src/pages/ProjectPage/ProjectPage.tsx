@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { DragDropContext, DragUpdate, Droppable } from "react-beautiful-dnd"
-import { InitialState, Project, Task } from "../../types/DataTypes"
+import { State, Project, Task } from "../../types/DataTypes"
 import Column from "../../components/Column/Column"
 import Search from "../../components/Search/Search"
 
@@ -12,8 +12,8 @@ const ProjectPage = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { id } = useParams() as {id: string}
-  const project = useSelector<InitialState, Project|undefined>((state) => state.projects.find(project => project.id === id))
-  const allTasks = useSelector<InitialState, Task[]>((state) => state.tasks)
+  const project = useSelector<State, Project|undefined>((state) => state.projects.find(project => project.id === id))
+  const allTasks = useSelector<State, Task[]>((state) => state.tasks)
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
 
   useEffect(() => {
