@@ -6,21 +6,23 @@ import { State, Project, Task } from "../../types/DataTypes"
 import Column from "../../components/Column/Column"
 import Search from "../../components/Search/Search"
 
-
-
 const ProjectPage = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { id } = useParams() as {id: string}
-  const project = useSelector<State, Project|undefined>((state) => state.projects.find(project => project.id === id))
+  const { id } = useParams() as { id: string }
+  const [searchText, setSearchText] = useState('')
+  const project = useSelector<State, Project | undefined>((state) => state.projects.find(project => project.id === id))
   const allTasks = useSelector<State, Task[]>((state) => state.tasks)
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
+  const filteredTtasks = allTasks.filter(task => task.projectId === id).filter(task => {
+    if (searchText) {
+      return task.title.includes(searchText)
+    } else return task
+  })
 
   useEffect(() => {
-    if(!project) navigate('/')
-    setFilteredTasks(allTasks)
-  },[id, project, allTasks])
-  
+    if (!project) navigate('/')
+  }, [])
+
   const deleteProject = () => {
     dispatch({
       type: "DELETE_PROJECT",
@@ -65,7 +67,7 @@ const ProjectPage = () => {
       <button className="back-to-projects" onClick={() => navigate('/')}>Back to all projects</button>
       <div className="project-header">
         <h2>Project: {project?.title}</h2>
-        <Search setFilteredTasks={setFilteredTasks} allTasks={allTasks} />
+        <Search setSearchText={setSearchText} />
         <button onClick={deleteProject}>Delete project</button>
       </div>
       <div className="tasks">
@@ -73,7 +75,7 @@ const ProjectPage = () => {
           <Droppable droppableId="Queue">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <Column projectId={id} title={'Queue'} tasks={filteredTasks.filter(task => task.column === 'Queue')}/>
+                <Column projectId={id} title={'Queue'} tasks={filteredTtasks.filter(task => task.column === 'Queue')} />
                 {provided.placeholder}
               </div>
             )}
@@ -81,7 +83,7 @@ const ProjectPage = () => {
           <Droppable droppableId="Development">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <Column projectId={id} title={'Development'} tasks={filteredTasks.filter(task => task.column === 'Development')}/>
+                <Column projectId={id} title={'Development'} tasks={filteredTtasks.filter(task => task.column === 'Development')} />
                 {provided.placeholder}
               </div>
             )}
@@ -89,7 +91,7 @@ const ProjectPage = () => {
           <Droppable droppableId="Done">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <Column projectId={id} title={'Done'} tasks={filteredTasks.filter(task => task.column === 'Done')}/>
+                <Column projectId={id} title={'Done'} tasks={filteredTtasks.filter(task => task.column === 'Done')} />
                 {provided.placeholder}
               </div>
             )}

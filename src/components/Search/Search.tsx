@@ -1,17 +1,14 @@
-import { Task } from "../../types/DataTypes"
-
 type Props = {
-  setFilteredTasks: React.Dispatch<React.SetStateAction<Task[]>>,
-  allTasks: Task[]
+  setSearchText: React.Dispatch<React.SetStateAction<string>>
 }
-const Search = ({setFilteredTasks, allTasks}: Props) => {
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const filteredTasks = allTasks.filter(task => task.title.includes(e.target.value))
-      setFilteredTasks(filteredTasks)
-    }
+
+const Search = ({ setSearchText }: Props) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value)
+  }
   return (
     <div>
-        <input type="search" onChange={handleSearch} placeholder="Search for tasks by title"/>
+      <input type="search" onChange={handleSearch} placeholder="Search for tasks by title" />
     </div>
   )
 }
