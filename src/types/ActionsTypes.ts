@@ -1,4 +1,4 @@
-import { Column, Project, SubTask, Task } from "./DataTypes"
+import { Column, Comment, Project, SubTask, Task } from "./DataTypes"
 
 export enum ActionTypes {
     ADD_PROJECT = 'ADD_PROJECT',
@@ -11,7 +11,9 @@ export enum ActionTypes {
     DELETE_SUBTASK = 'DELETE_SUBTASK',
     CHECK_SUBTASK = 'CHECK_SUBTASK',
     REFRESH_TASKS = 'REFRESH_TASKS',
-    ADD_FILE = 'ADD_FILE'
+    ADD_FILE = 'ADD_FILE',
+    ADD_COMMENT = 'ADD_COMMENT',
+    DELETE_COMMENT = 'DELETE_COMMENT'
 }
 
 type addProjectAction = {
@@ -83,7 +85,23 @@ type refreshTasksAction = {
         currentIndex: number,
         targetList: Column,
         targetIndex: number,
-      }
+    }
+}
+
+type addComment = {
+    type: ActionTypes.ADD_COMMENT,
+    payload: {
+        taskId: string,
+        comment: Comment
+    }
+}
+
+type deleteComment = {
+    type: ActionTypes.DELETE_COMMENT,
+    payload: {
+        taskId: string,
+        commentId: string
+    }
 }
 
 export type Actions = addProjectAction
@@ -97,3 +115,5 @@ export type Actions = addProjectAction
 | checkSubtaskAction
 | refreshTasksAction
 | addFileAction
+| addComment
+| deleteComment

@@ -170,7 +170,9 @@ button:focus-visible {
 .task {
   background: #ebecf0;
   padding: 10px;
-  min-width: 50%;
+  min-width: 70%;
+  height: 80%;
+  overflow: auto;
 }
 
 .task-header {
@@ -289,4 +291,20 @@ button:focus-visible {
 
 .done {
   border-color: #6bc950;
+}
+
+.comment {
+  margin-left: 30px;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.comment p {
+  text-align: left;
+}
+
+.comment-form {
+  display: flex;
+  gap: 10px;
 }

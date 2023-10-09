@@ -6,11 +6,13 @@ import { Editor } from '@tinymce/tinymce-react'
 import FileUpload from "../FileUpload"
 import { getDateDiff } from "../../utils"
 import { Editor as TypeEditor } from "tinymce"
+import Comments from "../Comments/Comments"
+
 type Props = {
     task: Task,
     toggleTask: React.MouseEventHandler<HTMLButtonElement>
 }
-const ModalTask = ({ task: { description, id, title, time, files, subtasks }, toggleTask }: Props) => {
+const ModalTask = ({ task: { description, id, title, time, files, subtasks, comments }, toggleTask }: Props) => {
 
     const dispatch = useDispatch()
 
@@ -118,7 +120,7 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks }, to
                     }
                     <div className="subtask-form">
                         <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="add subtask" />
-                        <button disabled={!subTaskTitle.trim()} onClick={addSubTask}>add</button>
+                        <button disabled={!subTaskTitle.trim()} onClick={addSubTask}>Add</button>
                     </div>
                     <div className="files-form">
                         <div className="files">
@@ -129,6 +131,9 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks }, to
                         : <button onClick={() => setIsLoadFile(true)}>Add file</button>
                         }
                     </div>
+                    {/* {comments.map(comment => <Comments comment={} taskId={ta}/>)} */}
+                    <Comments comments={comments} taskId={id}/>
+                    
                 </div>
             </div>
         </div>

@@ -43,7 +43,8 @@ export type File = {
 export type Comment = {
     id: string,
     text: string,
-    comments?: Comment[]
+    children: Comment[],
+    parentId: string | null
 }
 
 export type Column = 'Queue' | 'Development' | 'Done'
