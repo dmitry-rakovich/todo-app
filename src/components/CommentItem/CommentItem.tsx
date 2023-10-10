@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { Comment } from "../../types/DataTypes";
 import { useState } from "react";
+import dayjs from "dayjs";
 
 type Props = {
     comment: Comment,
@@ -17,7 +18,8 @@ const CommentItem = ({comment, taskId}: Props) => {
           id: window.crypto.randomUUID(),
           parentId: comment.id,
           children: [],
-          text: value
+          text: value,
+          date: dayjs(new Date()).format('DD/MM/YYYY, hh:mm')
         },
         taskId: taskId
       }
@@ -35,14 +37,17 @@ const CommentItem = ({comment, taskId}: Props) => {
     })
   }
     return (
-        <div className="comment">
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBlock: '10px'}}>
-            <p>{comment.text}</p>
+        <details className="comment" title="Click to open/close comment">
+          <summary className="comment-preview">
+            <div>
+              <p className="comment-date">Created: {comment.date}</p>
+              <p>{comment.text}</p>
+            </div>
             <button onClick={deleteComment}>Delete</button>
-          </div>
+          </summary>
             <div className="comment-form">
                 <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Add comment" />
-                <button onClick={addComment}>Add</button>
+                <button disabled={!value.trim()} onClick={addComment}>Add</button>
             </div>
             {
                 !!comment.children.length && 
@@ -52,7 +57,7 @@ const CommentItem = ({comment, taskId}: Props) => {
                   comment={comment}
               />)
             }
-        </div>
+        </details>
     )
 }
 

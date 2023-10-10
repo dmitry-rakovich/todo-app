@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Comment } from "../../types/DataTypes";
 import { useDispatch } from "react-redux";
 import CommentItem from "../CommentItem/CommentItem";
+import dayjs from "dayjs";
 
 type Props = {
   comments: Comment[],
@@ -19,7 +20,8 @@ const Comments = ({comments, taskId}: Props) => {
           id: window.crypto.randomUUID(),
           parentId: null,
           children: [],
-          text: value
+          text: value,
+          date: dayjs(new Date()).format('DD/MM/YYYY, hh:mm')
         },
         taskId: taskId
       }
@@ -29,15 +31,15 @@ const Comments = ({comments, taskId}: Props) => {
   return (
     <div>
       <h3>Comments</h3>
-      <div className="comment-form">
-        <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Add comment" />
-        <button onClick={addComment}>Add</button>
-      </div>
         {
           comments
             .filter(comment => !comment.parentId)
             .map(comment => <CommentItem key={comment.id} comment={comment} taskId={taskId} />)
         }
+        <div className="comment-form">
+          <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Add comment" />
+          <button disabled={!value.trim()} onClick={addComment}>Add</button>
+        </div>
     </div>
   );
 };

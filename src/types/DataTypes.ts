@@ -44,7 +44,8 @@ export type Comment = {
     id: string,
     text: string,
     children: Comment[],
-    parentId: string | null
+    parentId: string | null,
+    date: string
 }
 
 export type Column = 'Queue' | 'Development' | 'Done'
