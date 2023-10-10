@@ -21,6 +21,7 @@ const ProjectPage = () => {
 
   useEffect(() => {
     if (!project) navigate('/')
+    document.title = `Project ${project?.title} | ToDo App`
   }, [])
 
   const deleteProject = () => {

@@ -1,11 +1,10 @@
-import { useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { State, Project} from "../../types/DataTypes"
 
 const Projects = () => {
 
-    const ref = useRef<HTMLInputElement>(null)
     const projects = useSelector<State, Project[]>(state => state.projects)
 
     const dispatch = useDispatch()
@@ -14,37 +13,27 @@ const Projects = () => {
     const [value, setValue] = useState('')
 
     const addNewProject = () => {
-        if(value.trim()) {
-            dispatch({
-                type: "ADD_PROJECT",
-                payload: {
-                    title: value,
-                    id: window.crypto.randomUUID()
-                }
-            })
-            setValue('')
-            setIsOpenForm(false)
-        } else {
-            setValue('')
-            ref?.current?.setCustomValidity('Поле не может быть пустым')
-            ref?.current?.reportValidity()
-            return
-        }
+        dispatch({
+            type: "ADD_PROJECT",
+            payload: {
+                title: value,
+                id: window.crypto.randomUUID()
+            }
+        })
+        setValue('')
+        setIsOpenForm(false)
     }            
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e?.target?.value.trim()) {
-            ref.current?.setCustomValidity('')
-            setValue(e?.target?.value)
-        } else {
-            ref.current?.setCustomValidity('Поле не может быть пустым')
-            setValue('')
-            return
-        }
-    }
+
     const closeForm = () => {
         setValue('')
         setIsOpenForm(false)
     }
+
+    useEffect(() => {
+        document.title = 'Projects Page | ToDo App'
+    }, [])
+    
+
     return (
         <div className="projects">
             {
@@ -62,10 +51,10 @@ const Projects = () => {
                     !isOpenForm
                     ? <button onClick={() => setIsOpenForm(true)}>Add new project</button>
                     : <>
-                        <input type="text" ref={ref} value={value} onChange={handleChange} autoFocus/>
+                        <input type="text" value={value} onChange={(e) => setValue(e.target.value)} autoFocus placeholder="Add project title"/>
                         <div className="buttons">
-                            <button onClick={addNewProject}>add</button>
-                            <button onClick={closeForm}>close</button>
+                            <button onClick={addNewProject} disabled={!value.trim()}>Add</button>
+                            <button onClick={closeForm}>Close</button>
                         </div>
                     </>
                 }
