@@ -1,30 +1,25 @@
 import { useRef, useState } from "react"
 import { useDispatch } from "react-redux"
 import { Task } from "../../types/DataTypes"
-import SubTaskItem from "../SubtaskItem/SubTaskItem"
-import { Editor } from '@tinymce/tinymce-react'
-import FileUpload from "../FileUpload"
 import { getDateDiff } from "../../utils"
-import { Editor as TypeEditor } from "tinymce"
+import SubTaskItem from "../SubtaskItem/SubTaskItem"
 import Comments from "../Comments/Comments"
 
 type Props = {
     task: Task,
     toggleTask: React.MouseEventHandler<HTMLButtonElement>
 }
-const ModalTask = ({ task: { description, id, title, time, files, subtasks, comments }, toggleTask }: Props) => {
+const ModalTask = ({ task: { description, id, title, time, subtasks, comments }, toggleTask }: Props) => {
 
     const dispatch = useDispatch()
 
     const inputRef = useRef<HTMLInputElement>(null)
-    const [editorRef, setEditorRef] = useState<TypeEditor>()
     
-    const [dirty, setDirty] = useState(false);
     const [isEditDescription, setIsEditDescription] = useState(false);
     const [isEditTitle, setIsEditTitle] = useState(false);
     const [subTaskTitle, setSubTaskTitle] = useState('')
     const [taskTitle, setTaskTitle] = useState(title)
-    const [isLoadFile, setIsLoadFile] = useState(false)
+    const [taskDescription, setTaskDescription] = useState(description || 'No description')
     
     const addSubTask = () => {
         dispatch({
@@ -43,19 +38,15 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks, comm
     }
 
     const saveDescription = () => {
-        if (editorRef) {            
-            setDirty(false);
-            setIsEditDescription(false)
-            editorRef.setDirty(false);
-            dispatch({
-                type: "ADD_TASK_DESCRIPTION",
-                payload: {
-                    id,
-                    description: editorRef.getContent()
-                }
-            })            
+        dispatch({
+            type: "ADD_TASK_DESCRIPTION",
+            payload: {
+                id,
+                description: taskDescription
+            }
+        })            
+        setIsEditDescription(false)
         }
-    };
 
     const saveTitle = () => {
         dispatch({
@@ -77,7 +68,7 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks, comm
                             isEditTitle
                             ? <>
                                 <input type="text" value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} placeholder="Task Title"/>
-                                <button onClick={saveTitle}>Save</button>
+                                <button onClick={saveTitle} disabled={!taskTitle.trim()}>Save</button>
                                 <button onClick={() => setIsEditTitle(false)}>Close</button>
                             </>
                             : <h2 onClick={() => setIsEditTitle(true)}>Task: {title}</h2>
@@ -95,14 +86,9 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks, comm
                     {
                         isEditDescription
                             ? <>
-                                <Editor
-                                    apiKey="fa6f7nl0i6n48irja1r7k22b6adlgwzng7venrfuaf2vazmq"
-                                    initialValue={description || 'No description'}
-                                    onInit={(_, editor) => setEditorRef(editor)}
-                                    onDirty={() => setDirty(true)}
-                                />
+                            <input onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder="Add description"/>
                                 <div className="buttons">
-                                    <button onClick={saveDescription} disabled={!dirty}>Save description</button>
+                                    <button onClick={saveDescription} disabled={!taskDescription.trim()}>Save description</button>
                                     <button onClick={() => setIsEditDescription(false)} >Close Editor</button>
                                 </div>
                             </>
@@ -110,8 +96,7 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks, comm
                                 className="task-description"
                                 title="Click to edit description"
                                 onClick={() => setIsEditDescription(true)}
-                                dangerouslySetInnerHTML={{__html: description ||  'No description'}}
-                            />
+                            >{taskDescription}</div>
                     }
 
                     <h3>Subtasks</h3>
@@ -119,21 +104,10 @@ const ModalTask = ({ task: { description, id, title, time, files, subtasks, comm
                         subtasks.map(subtask => <SubTaskItem key={subtask.id} taskId={id} subtask={subtask} />)
                     }
                     <div className="subtask-form">
-                        <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="add subtask" />
+                        <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="Add subtask" />
                         <button disabled={!subTaskTitle.trim()} onClick={addSubTask}>Add</button>
                     </div>
-                    <div className="files-form">
-                        <div className="files">
-                            {files.map(file => <a key={file.id} href={file.path} download>{file.name}</a>)}
-                        </div>
-                        {isLoadFile
-                        ? <FileUpload taskId={id} handleClose={setIsLoadFile}/>
-                        : <button onClick={() => setIsLoadFile(true)}>Add file</button>
-                        }
-                    </div>
-                    {/* {comments.map(comment => <Comments comment={} taskId={ta}/>)} */}
                     <Comments comments={comments} taskId={id}/>
-                    
                 </div>
             </div>
         </div>
