@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Comment } from "../../types/DataTypes";
 import CommentItem from "../CommentItem/CommentItem";
-import dayjs from "dayjs";
 import { useAppDispatch } from "../../hooks/hooks";
 import { addComment } from "../../redux/actions/commentsActions";
 import styles from "./Comments.module.css"
@@ -19,7 +18,7 @@ const Comments = ({ comments, taskId }: Props) => {
       id: window.crypto.randomUUID(),
       taskId,
       text: value,
-      date: dayjs(new Date()).format('DD/MM/YYYY, HH:mm')
+      date: new Date().toString()
     }))
     setValue('')
   }

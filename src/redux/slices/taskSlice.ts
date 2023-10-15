@@ -27,7 +27,7 @@ export const taskSlice = createSlice({
             state.tasks = state.tasks.map(task => {
                 if(task.id === action.payload.id) {
                     if(action.payload.status === Status.DONE) {
-                        task.time.finish = new Date().toDateString()
+                        task.time.finish = new Date().toString()
                     }
                     if(task.status === Status.DONE) {
                         task.time.finish = ''

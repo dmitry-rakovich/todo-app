@@ -8,6 +8,7 @@ import SubTaskItem from "../SubTaskItem/SubTaskItem"
 import Comments from "../Comments/Comments"
 import { fetchComments } from "../../redux/actions/commentsActions"
 import styles from "./ModalTask.module.css"
+import dayjs from "dayjs"
 
 type Props = {
     task: Task,
@@ -61,9 +62,9 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
                 </div>
                 <div className={styles.wrapper}>
                     <div className={styles.time}>
-                        <p><b>Created:</b> {time.create}</p>
-                        <p><b>In Progress:</b> {getDateDiff(time.finish || new Date(), time.create)}</p>
-                        {time.finish && <p><b>Completed:</b> {time.finish}</p>}
+                        <p><b>Created:</b> {dayjs(time.create).format('DD/MM/YYYY, HH:mm:ss')}</p>
+                        <p><b>In Progress:</b> {getDateDiff(time.finish || new Date().toString(), time.create)}</p>
+                        {time.finish && <p><b>Completed:</b> {dayjs(time.finish).format('DD/MM/YYYY, HH:mm:ss')}</p>}
                     </div>
                     <div className={styles.status}>
                         <select value={taskStatus} onChange={(e) => setTaskStatus(e.target.value as Status)}>
