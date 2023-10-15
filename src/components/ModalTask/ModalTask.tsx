@@ -5,7 +5,8 @@ import { editStatus, editDescription } from "../../redux/actions/taskActions"
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import { fetchSubTasks, addSubTask } from "../../redux/actions/subtaskActions"
 import SubTaskItem from "../SubtaskItem/SubTaskItem"
-// import Comments from "../Comments/Comments"
+import Comments from "../Comments/Comments"
+import { fetchComments } from "../../redux/actions/commentsActions"
 
 type Props = {
     task: Task,
@@ -16,6 +17,7 @@ const ModalTask = ({ task: { description, id, title, time, column }, toggleTask 
 
     const dispatch = useAppDispatch()
     const { subtasks } = useAppSelector(state => state.subtasks)
+    const { comments } = useAppSelector(state => state.comments)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -45,6 +47,7 @@ const ModalTask = ({ task: { description, id, title, time, column }, toggleTask 
 
     useEffect(() => {
         dispatch(fetchSubTasks(id))
+        dispatch(fetchComments(id))
     }, [])
 
 
@@ -104,7 +107,7 @@ const ModalTask = ({ task: { description, id, title, time, column }, toggleTask 
                             <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="Add subtask" />
                             <button disabled={!subTaskTitle.trim()} onClick={addNewSubTask}>Add</button>
                         </div>
-                        {/* <Comments comments={comments} taskId={id}/> */}
+                        <Comments comments={comments} taskId={id}/>
                     </div>
                 </div>
             </div>

@@ -31,9 +31,8 @@ export type SubTask = {
 
 export type Comment = {
     id: string,
+    taskId: string,
     text: string,
-    children: Comment[],
-    parentId: string | null,
     date: string
 }
 
