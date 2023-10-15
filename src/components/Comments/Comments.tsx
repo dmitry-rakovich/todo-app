@@ -1,45 +1,39 @@
 import { useState } from "react";
 import { Comment } from "../../types/DataTypes";
-import { useDispatch } from "react-redux";
 import CommentItem from "../CommentItem/CommentItem";
 import dayjs from "dayjs";
+import { useAppDispatch } from "../../hooks/hooks";
+import { addComment } from "../../redux/actions/commentsActions";
 
 type Props = {
   comments: Comment[],
   taskId: string
 }
 
-const Comments = ({comments, taskId}: Props) => {
+const Comments = ({ comments, taskId }: Props) => {
   const [value, setValue] = useState('')
-  const dispatch = useDispatch()
-  const addComment = () => {
-    dispatch({
-      type: 'ADD_COMMENT',
-      payload: {
-        comment: {
-          id: window.crypto.randomUUID(),
-          parentId: null,
-          children: [],
-          text: value,
-          date: dayjs(new Date()).format('DD/MM/YYYY, hh:mm')
-        },
-        taskId: taskId
-      }
-    })
+  const dispatch = useAppDispatch()
+  const addNewComment = () => {
+    dispatch(addComment({
+      id: window.crypto.randomUUID(),
+      taskId,
+      text: value,
+      date: dayjs(new Date()).format('DD/MM/YYYY, HH:mm')
+    }))
     setValue('')
   }
   return (
     <div>
       <h3>Comments</h3>
-        {
-          comments
-            .filter(comment => !comment.parentId)
-            .map(comment => <CommentItem key={comment.id} comment={comment} taskId={taskId} />)
-        }
-        <div className="comment-form">
-          <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Add comment" />
-          <button disabled={!value.trim()} onClick={addComment}>Add</button>
-        </div>
+      {
+        comments.map(comment => <CommentItem key={comment.id} comment={comment} />)
+      }
+      <div className="comment-form" onKeyUp={(e) => {
+        if (e.key === 'Enter' && value.trim()) addNewComment()
+      }}>
+        <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Add comment" />
+        <button disabled={!value.trim()} onClick={addNewComment}>Add</button>
+      </div>
     </div>
   );
 };
