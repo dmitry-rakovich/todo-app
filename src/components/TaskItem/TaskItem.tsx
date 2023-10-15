@@ -1,45 +1,31 @@
-import { useDispatch } from "react-redux"
 import { useState } from "react"
 import { Task } from "../../types/DataTypes"
 import ModalTask from "../ModalTask/ModalTask"
-import { Draggable } from "react-beautiful-dnd"
+import { useAppDispatch } from "../../hooks/hooks"
+import { deleteTask } from "../../redux/actions/taskActions"
 type Props = {
-  task: Task,
-  index: number
+  task: Task
 }
-const TaskItem = ({task, index}: Props) => {
+const TaskItem = ({ task }: Props) => {
 
-  const dispatch = useDispatch()
-  
+  const dispatch = useAppDispatch()
+
   const [isShowTask, setIsShowTask] = useState(false)
-  const deleteTask = (id: string) => {
-    dispatch({
-      type: "DELETE_TASK",
-      payload: id
-    })
+  const removeTask = (id: string) => {
+    dispatch(deleteTask(id))
   }
 
   const toggleTask = () => {
     setIsShowTask(!isShowTask)
   }
-  
+
   return (
     <>
       {isShowTask && <ModalTask task={task} toggleTask={toggleTask} />}
-      <Draggable draggableId={task.id} index={index} key={task.id}>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <div className='task-item' onClick={toggleTask} title="Click to open task">
-              <h2>{task.title}</h2>
-              <button onClick={() => deleteTask(task.id)}>Delete</button>
-            </div>
-          </div>
-        )}
-      </Draggable>
+      <div className='task-item' >
+        <h2 onClick={toggleTask} title="Click to open task">{task.title}</h2>
+        <button onClick={() => removeTask(task.id)}>Delete</button>
+      </div>
     </>
   )
 }

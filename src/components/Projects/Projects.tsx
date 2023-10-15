@@ -1,28 +1,25 @@
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
-import { State, Project} from "../../types/DataTypes"
+import { Project } from "../../types/DataTypes"
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
+import { fetchProjects, addProject} from "../../redux/actions/projectActions"
 
 const Projects = () => {
 
-    const projects = useSelector<State, Project[]>(state => state.projects)
-
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
+    const { error, isLoading, projects: newProjects } = useAppSelector(state => state.projects)
 
     const [isOpenForm, setIsOpenForm] = useState(false)
     const [value, setValue] = useState('')
 
-    const addNewProject = () => {
-        dispatch({
-            type: "ADD_PROJECT",
-            payload: {
-                title: value,
-                id: window.crypto.randomUUID()
-            }
-        })
+    const addNewProject = () => {        
+        dispatch(addProject({
+            title: value,
+            id: window.crypto.randomUUID()
+        }))
         setValue('')
         setIsOpenForm(false)
-    }            
+    }
 
     const closeForm = () => {
         setValue('')
@@ -31,13 +28,15 @@ const Projects = () => {
 
     useEffect(() => {
         document.title = 'Projects Page | ToDo App'
+        dispatch(fetchProjects())
     }, [])
-    
+
 
     return (
         <div className="projects">
+            {isLoading ? <h1>Loading...</h1> : error ? <h1>{error}</h1> : <>
             {
-                projects.map((project: Project) => (
+                newProjects.map((project: Project) => (
                     <div className="project" key={project.id}>
                         <Link to={`/project/${project.id}`}>
                             <h1>{project.title}</h1>
@@ -46,19 +45,22 @@ const Projects = () => {
                 )
                 )
             }
-            <div className="project">
+            <div className="project" onKeyUp={(e) => {
+                if(e.key === 'Enter' && value.trim()) addNewProject()
+            }}>
                 {
                     !isOpenForm
-                    ? <button onClick={() => setIsOpenForm(true)}>Add new project</button>
-                    : <>
-                        <input type="text" value={value} onChange={(e) => setValue(e.target.value)} autoFocus placeholder="Add project title"/>
-                        <div className="buttons">
-                            <button onClick={addNewProject} disabled={!value.trim()}>Add</button>
-                            <button onClick={closeForm}>Close</button>
-                        </div>
-                    </>
+                        ? <button onClick={() => setIsOpenForm(true)}>Add new project</button>
+                        : <>
+                            <input type="text" value={value} onChange={(e) => setValue(e.target.value)} autoFocus placeholder="Add project title" />
+                            <div className="buttons">
+                                <button onClick={addNewProject} disabled={!value.trim()}>Add</button>
+                                <button onClick={closeForm}>Close</button>
+                            </div>
+                        </>
                 }
             </div>
+            </>}
         </div>
     )
 }

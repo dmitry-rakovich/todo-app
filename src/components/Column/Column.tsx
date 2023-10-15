@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { Column as TypeColumn, Task } from '../../types/DataTypes'
 import TaskItem from '../TaskItem/TaskItem'
+import { useAppDispatch } from '../../hooks/hooks'
+import { addTask } from '../../redux/actions/taskActions'
 
 type Props = {
     projectId: string,
@@ -11,46 +12,35 @@ type Props = {
 
 const Column = ({ projectId, title, tasks, }: Props) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const [value, setValue] = useState('')
     const addNewTask = () => {
-
-        const newTask: Task = {
+        dispatch(addTask({
             column: title,
             id: window.crypto.randomUUID(),
             projectId,
-            subtasks: [],
-            files: [],
-            comments: [],
             title: value,
             time: {
                 create: new Date().toDateString(),
-                finish: title === 'Done' ? new Date().toDateString(): ''
+                finish: title === 'Done' ? new Date().toDateString() : ''
             },
-            description: ''
-        }
-        dispatch({
-            type: "ADD_TASK",
-            payload: newTask
-        })
+            description: '',
+        }))
         setValue('')
     }
 
 
     return (
-        <div className={`column ${title.toLowerCase()}`}>
+        <div className={`column ${title.toLowerCase()}`} onKeyUp={(e) => {
+            if(e.key === 'Enter' && value.trim()) addNewTask()
+        }}>
             <h2>{title}</h2>
             {
-                !!tasks.length &&
-                <>
-                    {
-                        tasks.map((task, index) => <TaskItem key={task.id} index={index} task={task} />
-                        )
-                    }
-                </>
+                !!tasks.length
+                && tasks.map((task) => <TaskItem key={task.id} task={task} />)
             }
-            <input autoFocus value={value} onChange={(e) => setValue(e.target.value)} placeholder='Add new task' />
+            <input value={value} onChange={(e) => setValue(e.target.value)} placeholder='Add new task' />
             <button disabled={!value.trim()} onClick={addNewTask}>Add</button>
         </div>
     )
