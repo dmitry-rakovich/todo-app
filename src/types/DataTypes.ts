@@ -13,7 +13,7 @@ export type Task = {
     projectId: string,
     title: string,
     description: string,
-    column: Column,
+    status: Status,
     time: Time,
 }
 
@@ -36,4 +36,8 @@ export type Comment = {
     date: string
 }
 
-export type Column = 'Queue' | 'Development' | 'Done'
+export enum Status {
+    QUEUE = 'Queue',
+    DEVELOPMENT = 'Development',
+    DONE = 'Done'
+}

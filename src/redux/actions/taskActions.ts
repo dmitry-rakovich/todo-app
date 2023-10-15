@@ -1,8 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Column, Task } from "../../types/DataTypes";
+import { Status, Task } from "../../types/DataTypes";
 import { taskActions } from "../slices/taskSlice"
 import { URL } from "../../constants";
+
+type Data = {
+    id: string,
+    status?: Status,
+    description?: string
+}
 
 export const fetchTasks = createAsyncThunk(
     'tasks/fetchTasks',
@@ -23,7 +29,7 @@ export const addTask = createAsyncThunk('tasks/addTask',
             thunkAPI.dispatch(taskActions.addTask(response.data))
             return response.data
         } catch (error) {
-            return thunkAPI.rejectWithValue('Error')
+            return thunkAPI.rejectWithValue(error)
         }
     } 
 )
@@ -35,35 +41,30 @@ export const deleteTask = createAsyncThunk('tasks/deleteTask',
             thunkAPI.dispatch(taskActions.deleteTask(id))
             return response.data
         } catch (error) {
-            return thunkAPI.rejectWithValue('Error')
+            return thunkAPI.rejectWithValue(error)
         }
     } 
 ) 
 
-export const editStatus = createAsyncThunk('tasks/editTask',
-    async ({id, column}: {id: string, column: Column}, thunkAPI) => {
+export const editTask = createAsyncThunk('tasks/editTask',
+    async ({id, status, description}: Data, thunkAPI) => {
+        const data: Data = {
+            id
+        }
+        if(description) {
+           data.description = description
+        }
+        if(status) {
+           data.status = status
+        }
         try {
-            const response = await axios.patch<Task[]>(`${URL}/tasks/${id}`, {
-                column 
-            })
-            thunkAPI.dispatch(taskActions.editStatus({id, column}))
+            const response = await axios.patch<Task[]>(`${URL}/tasks/${id}`, data)
+            description ?
+            thunkAPI.dispatch(taskActions.editDescription({id, description}))
+            : thunkAPI.dispatch(taskActions.editStatus({id, status}))
             return response.data
         } catch (error) {
-            return thunkAPI.rejectWithValue('Error')
+            return thunkAPI.rejectWithValue(error)
         }
     } 
 )
-
-export const editDescription = createAsyncThunk('tasks/editDescription',
-    async ({id, description}: {id: string, description: string}, thunkAPI) => {
-        try {
-            const response = await axios.patch<Task[]>(`${URL}/tasks/${id}`, {
-                description 
-            })
-            thunkAPI.dispatch(taskActions.editDescription({id, description}))
-            return response.data
-        } catch (error) {
-            return thunkAPI.rejectWithValue('Error')
-        }
-    } 
-) 

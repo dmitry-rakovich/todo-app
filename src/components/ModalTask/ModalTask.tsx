@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Status, Task } from "../../types/DataTypes"
 import { getDateDiff } from "../../utils"
-import { editStatus } from "../../redux/actions/taskActions"
+import { editTask } from "../../redux/actions/taskActions"
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import { fetchSubTasks, addSubTask } from "../../redux/actions/subtaskActions"
 import SubTaskItem from "../SubTaskItem/SubTaskItem"
@@ -39,10 +39,10 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
     }
 
     const changeStatus = () => {
-        dispatch(editStatus({ id, status: taskStatus }))
+        dispatch(editTask({ id, status: taskStatus }))
     }
     const changeDescription = () => {
-        dispatch(editStatus({ id, description: taskDescription }))
+        dispatch(editTask({ id, description: taskDescription }))
         setIsEditDescription(false)
     }
 

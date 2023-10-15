@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Task } from '../../types/DataTypes'
+import { Status, Task } from '../../types/DataTypes'
 import {  addTask, deleteTask, fetchTasks } from "../actions/taskActions";
 
 type TaskState = {
@@ -26,18 +26,18 @@ export const taskSlice = createSlice({
         editStatus(state, action) {
             state.tasks = state.tasks.map(task => {
                 if(task.id === action.payload.id) {
-                    if(action.payload.column === 'Done') {
+                    if(action.payload.status === Status.DONE) {
                         task.time.finish = new Date().toDateString()
                     }
-                    if(task.column === 'Done') {
+                    if(task.status === Status.DONE) {
                         task.time.finish = ''
                     }
-                    task.column = action.payload.column
+                    task.status = action.payload.status
                 }
                 return task
             })
         },
-        editDescription(state, action) {
+        editDescription(state, action) {            
             state.tasks = state.tasks.map(task => {
                 if(task.id === action.payload.id) {
                     task.description = action.payload.description
