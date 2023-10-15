@@ -2,7 +2,7 @@ import { SubTask } from "../../types/DataTypes"
 import { useState } from "react"
 import { useAppDispatch } from "../../hooks/hooks"
 import { deleteSubTask, toggleSubTask } from "../../redux/actions/subtaskActions"
-
+import styles from "./SubTaskItem.module.css"
 
 type Props = {
   subtask: SubTask
@@ -23,9 +23,9 @@ const SubTaskItem = ({ subtask: {id, checked, title} }: Props) => {
   }
 
   return (
-    <div key={id} className="subtask">
+    <div key={id} className={styles.subtask}>
       <input type="checkbox" checked={isChecked} onChange={handleCheckSubTask} className="subtask-checkbox" />
-      <span className="subtask-title">{title}</span>
+      <span className={styles.title}>{title}</span>
       <button onClick={() => removeSubTask(id)}>Delete</button>
     </div>
   )

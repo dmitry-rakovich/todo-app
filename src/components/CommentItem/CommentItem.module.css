@@ -1,0 +1,16 @@
+.comment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block: 10px;
+    gap: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    text-align: left;
+  }
+  
+  .date {
+    font-size: 12px;
+  }
+  

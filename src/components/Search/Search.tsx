@@ -7,9 +7,9 @@ const Search = ({ setSearchText }: Props) => {
     setSearchText(e.target.value)
   }
   return (
-    <div>
+    <>
       <input type="search" onChange={handleSearch} placeholder="Search for tasks by title" />
-    </div>
+    </>
   )
 }
 

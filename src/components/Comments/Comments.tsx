@@ -4,6 +4,7 @@ import CommentItem from "../CommentItem/CommentItem";
 import dayjs from "dayjs";
 import { useAppDispatch } from "../../hooks/hooks";
 import { addComment } from "../../redux/actions/commentsActions";
+import styles from "./Comments.module.css"
 
 type Props = {
   comments: Comment[],
@@ -28,7 +29,7 @@ const Comments = ({ comments, taskId }: Props) => {
       {
         comments.map(comment => <CommentItem key={comment.id} comment={comment} />)
       }
-      <div className="comment-form" onKeyUp={(e) => {
+      <div className={styles.form} onKeyUp={(e) => {
         if (e.key === 'Enter' && value.trim()) addNewComment()
       }}>
         <input type="text" value={value} onChange={(e) => setValue(e.target.value)} placeholder="Add comment" />

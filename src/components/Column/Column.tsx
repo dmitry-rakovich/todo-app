@@ -1,29 +1,29 @@
 import { useState } from 'react'
-import { Column as TypeColumn, Task } from '../../types/DataTypes'
+import { Status as TypeStatus, Task, Status } from '../../types/DataTypes'
 import TaskItem from '../TaskItem/TaskItem'
 import { useAppDispatch } from '../../hooks/hooks'
 import { addTask } from '../../redux/actions/taskActions'
-
+import styles from "./Column.module.css"
 type Props = {
     projectId: string,
-    title: TypeColumn,
+    title: TypeStatus,
     tasks: Task[]
 }
 
-const Column = ({ projectId, title, tasks, }: Props) => {
+const Column = ({ projectId, title, tasks }: Props) => {
 
     const dispatch = useAppDispatch()
 
     const [value, setValue] = useState('')
     const addNewTask = () => {
         dispatch(addTask({
-            column: title,
+            status: title,
             id: window.crypto.randomUUID(),
             projectId,
             title: value,
             time: {
                 create: new Date().toDateString(),
-                finish: title === 'Done' ? new Date().toDateString() : ''
+                finish: title === Status.DONE ? new Date().toDateString() : ''
             },
             description: '',
         }))
@@ -32,7 +32,13 @@ const Column = ({ projectId, title, tasks, }: Props) => {
 
 
     return (
-        <div className={`column ${title.toLowerCase()}`} onKeyUp={(e) => {
+        <div className={styles.column} style={{
+            borderColor:
+            title === Status.QUEUE ? "#d3d3d3"
+            : title === Status.DEVELOPMENT ? "#f9d900"
+            : "#6bc950"
+        }
+        } onKeyUp={(e) => {
             if(e.key === 'Enter' && value.trim()) addNewTask()
         }}>
             <h2>{title}</h2>

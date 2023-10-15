@@ -1,0 +1,44 @@
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.project {
+    min-width: 300px;
+    width: fit-content;
+    height: max-content;
+    padding: 10px;
+    gap: 10px;
+    display: grid;
+    place-items: center;
+    background-color: #ebecf0;
+    border-radius: 12px;
+}
+
+.project a {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-content: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-block: 30px;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.back {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}

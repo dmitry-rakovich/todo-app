@@ -1,0 +1,14 @@
+.column {
+    display: grid;
+    height: fit-content;
+    padding: 10px;
+    /*min425px p10*/
+    gap: 20px;
+    border-radius: 5px;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    border-top: 5px solid;
+    box-shadow: 0 2px 8px #00000014;
+    background-color: #fff;
+}

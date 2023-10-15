@@ -1,0 +1,12 @@
+.subtask {
+    display: grid;
+    grid-template-columns: 10% 1fr 15%;
+    align-items: center;
+    justify-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.title {
+    justify-self: flex-start;
+}
