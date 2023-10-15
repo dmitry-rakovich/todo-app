@@ -1,41 +1,32 @@
-import { useDispatch } from "react-redux"
 import { SubTask } from "../../types/DataTypes"
 import { useState } from "react"
+import { useAppDispatch } from "../../hooks/hooks"
+import { deleteSubTask, toggleSubTask } from "../../redux/actions/subtaskActions"
+
 
 type Props = {
-  taskId: string,
   subtask: SubTask
 }
-const SubTaskItem = ({ subtask: {id, checked, title}, taskId }: Props) => {
-  const dispatch = useDispatch()
+const SubTaskItem = ({ subtask: {id, checked, title} }: Props) => {
+  const dispatch = useAppDispatch()
   const [isChecked, setIsChecked] = useState(checked)
-  const deleteSubTask = (subTaskId: string) => {
-    dispatch({
-      type: "DELETE_SUBTASK",
-      payload: {
-        taskId,
-        subTaskId
-      }
-    })
+  const removeSubTask = (id: string) => {
+    dispatch(deleteSubTask(id))
   }
 
   const handleCheckSubTask = () => {
     setIsChecked(!isChecked)
-    dispatch({
-      type: "CHECK_SUBTASK",
-      payload: {
-        taskId,
-        subtaskId: id,
-        checked: !isChecked
-      }
-    })
+    dispatch(toggleSubTask({
+      id,
+      checked: !isChecked
+    }))
   }
 
   return (
     <div key={id} className="subtask">
       <input type="checkbox" checked={isChecked} onChange={handleCheckSubTask} className="subtask-checkbox" />
       <span className="subtask-title">{title}</span>
-      <button onClick={() => deleteSubTask(id)}>Delete</button>
+      <button onClick={() => removeSubTask(id)}>Delete</button>
     </div>
   )
 }

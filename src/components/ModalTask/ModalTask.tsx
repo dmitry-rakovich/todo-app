@@ -1,52 +1,52 @@
-import { useRef, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useEffect, useRef, useState } from "react"
 import { Column, Task } from "../../types/DataTypes"
 import { getDateDiff } from "../../utils"
 import { editStatus, editDescription } from "../../redux/actions/taskActions"
-import { useAppDispatch } from "../../hooks/hooks"
-// import SubTaskItem from "../SubtaskItem/SubTaskItem"
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
+import { fetchSubTasks, addSubTask } from "../../redux/actions/subtaskActions"
+import SubTaskItem from "../SubtaskItem/SubTaskItem"
 // import Comments from "../Comments/Comments"
 
 type Props = {
     task: Task,
     toggleTask: React.MouseEventHandler<HTMLButtonElement>
 }
+
 const ModalTask = ({ task: { description, id, title, time, column }, toggleTask }: Props) => {
 
-    const dispatch = useDispatch()
-
-    const newDispatch = useAppDispatch()
+    const dispatch = useAppDispatch()
+    const { subtasks } = useAppSelector(state => state.subtasks)
 
     const inputRef = useRef<HTMLInputElement>(null)
-    
+
     const [isEditDescription, setIsEditDescription] = useState(false);
     const [subTaskTitle, setSubTaskTitle] = useState('')
     const [taskDescription, setTaskDescription] = useState(description || 'No description')
     const [taskColumn, setTaskColumn] = useState<Column>(column)
-    
-    const addSubTask = () => {
-        dispatch({
-            type: "ADD_SUBTASK",
-            payload: {
-                taskId: id,
-                subtask: {
-                    id: window.crypto.randomUUID(),
-                    title: subTaskTitle,
-                    checked: false
-                }
-            }
-        })
+
+    const addNewSubTask = () => {
+        dispatch(addSubTask({
+            id: window.crypto.randomUUID(),
+            checked: false,
+            taskId: id,
+            title: subTaskTitle
+        }))
         setSubTaskTitle('')
         inputRef.current?.focus()
     }
 
     const changeColumn = () => {
-        newDispatch(editStatus({id, column: taskColumn}))
+        dispatch(editStatus({ id, column: taskColumn }))
     }
     const changeDescription = () => {
-        newDispatch(editDescription({id, description: taskDescription}))
+        dispatch(editDescription({ id, description: taskDescription }))
         setIsEditDescription(false)
     }
+
+    useEffect(() => {
+        dispatch(fetchSubTasks(id))
+    }, [])
+
 
     return (
         <div className="modal">
@@ -71,39 +71,40 @@ const ModalTask = ({ task: { description, id, title, time, column }, toggleTask 
                     </div>
                     <div className="task-description">
 
-                    <h3>Description</h3>
-                    {
-                        isEditDescription
-                        ? <>
-                        <textarea rows={5} onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder="Add description"></textarea>
-                            {/* <input onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder="Add description"/> */}
-                                <div className="buttons">
-                                    <button onClick={changeDescription} disabled={!taskDescription.trim()}>Save description</button>
-                                    <button onClick={() => {
-                                        setTaskDescription(description || "No description")
-                                        setIsEditDescription(false)
-                                    }} >Close Editor</button>
-                                </div>
-                            </>
-                            : <p
-                            className="task-description"
-                            title="Click to edit description"
-                            onClick={() => setIsEditDescription(true)}
-                            >{taskDescription}</p>
+                        <h3>Description</h3>
+                        {
+                            isEditDescription
+                                ? <>
+                                    <textarea rows={5} onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder="Add description"></textarea>
+                                    <div className="buttons">
+                                        <button onClick={changeDescription} disabled={!taskDescription.trim()}>Save description</button>
+                                        <button onClick={() => {
+                                            setTaskDescription(description || "No description")
+                                            setIsEditDescription(false)
+                                        }} >Close Editor</button>
+                                    </div>
+                                </>
+                                : <p
+                                    className="task-description"
+                                    title="Click to edit description"
+                                    onClick={() => setIsEditDescription(true)}
+                                >{taskDescription}</p>
                         }
-                        </div>
-
-<div>
-
-                    <h3>Subtasks</h3>
-                    {/* {
-                        subtasks.map(subtask => <SubTaskItem key={subtask.id} taskId={id} subtask={subtask} />)
-                    } */}
-                    <div className="subtask-form">
-                        <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="Add subtask" />
-                        <button disabled={!subTaskTitle.trim()} onClick={addSubTask}>Add</button>
                     </div>
-                    {/* <Comments comments={comments} taskId={id}/> */}
+
+                    <div className="subtask-list">
+
+                        <h3>Subtasks</h3>
+                        {
+                            subtasks.map(subtask => <SubTaskItem key={subtask.id} subtask={subtask} />)
+                        }
+                        <div className="subtask-form" onKeyUp={(e) => {
+                            if (e.key === 'Enter' && subTaskTitle.trim()) addNewSubTask()
+                        }}>
+                            <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="Add subtask" />
+                            <button disabled={!subTaskTitle.trim()} onClick={addNewSubTask}>Add</button>
+                        </div>
+                        {/* <Comments comments={comments} taskId={id}/> */}
                     </div>
                 </div>
             </div>
