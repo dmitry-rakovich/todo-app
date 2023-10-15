@@ -10,11 +10,11 @@ export const fetchSubTasks = createAsyncThunk(
         try {
             const response = await axios.get<SubTask[]>(`${URL}/subtasks?taskId=${id}`)
             return response.data
-        } catch (error) {            
+        } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
-    } 
-) 
+    }
+)
 
 export const addSubTask = createAsyncThunk('subtasks/addSubTask',
     async (subtask: SubTask, thunkAPI) => {
@@ -25,25 +25,25 @@ export const addSubTask = createAsyncThunk('subtasks/addSubTask',
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
-    } 
+    }
 )
 
 export const toggleSubTask = createAsyncThunk('subtasks/toggleSubTask',
-    async ({id, checked}: {id: string, checked: boolean}, thunkAPI) => {        
+    async ({ id, checked }: { id: string, checked: boolean }, thunkAPI) => {
         try {
             const response = await axios.patch(`${URL}/subtasks/${id}`, {
-                checked 
+                checked
             })
-            thunkAPI.dispatch(subTaskActions.editStatus({id, checked}))
+            thunkAPI.dispatch(subTaskActions.editStatus({ id, checked }))
             return response.data
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
-    } 
+    }
 )
 
 export const deleteSubTask = createAsyncThunk('subtasks/deleteSubTask',
-    async (id: string, thunkAPI) => {        
+    async (id: string, thunkAPI) => {
         try {
             const response = await axios.delete(`${URL}/subtasks/${id}`)
             thunkAPI.dispatch(subTaskActions.deleteSubTask(id))
@@ -51,5 +51,5 @@ export const deleteSubTask = createAsyncThunk('subtasks/deleteSubTask',
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
-    } 
+    }
 )

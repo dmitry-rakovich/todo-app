@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SubTask } from '../../types/DataTypes'
-import { addSubTask, fetchSubTasks, toggleSubTask} from "../actions/subtaskActions";
+import { addSubTask, fetchSubTasks, toggleSubTask } from "../actions/subtaskActions"
 
 type SubTaskState = {
     subtasks: SubTask[],
@@ -25,7 +25,7 @@ export const subTaskSlice = createSlice({
         },
         editStatus(state, action) {
             state.subtasks = state.subtasks.map(subtask => {
-                if(subtask.id === action.payload.id) {
+                if (subtask.id === action.payload.id) {
                     subtask.checked = action.payload.checked
                 }
                 return subtask
@@ -36,7 +36,7 @@ export const subTaskSlice = createSlice({
         builder.addCase(fetchSubTasks.pending, state => {
             state.isLoading = true
         })
-        builder.addCase(fetchSubTasks.fulfilled, (state, action) => {            
+        builder.addCase(fetchSubTasks.fulfilled, (state, action) => {
             state.isLoading = false
             state.error = ''
             state.subtasks = action.payload
@@ -44,19 +44,19 @@ export const subTaskSlice = createSlice({
         builder.addCase(fetchSubTasks.rejected, (state, action) => {
             state.isLoading = false
             state.subtasks = []
-            if(action?.error.message) {
+            if (action?.error.message) {
                 state.error = action.error.message
             }
         })
         builder.addCase(addSubTask.rejected, (state, action) => {
             state.isLoading = false
-            if(action?.error.message) {
+            if (action?.error.message) {
                 state.error = action.error.message
             }
         })
         builder.addCase(toggleSubTask.rejected, (state, action) => {
             state.isLoading = false
-            if(action?.error.message) {
+            if (action?.error.message) {
                 state.error = action.error.message
             }
         })
