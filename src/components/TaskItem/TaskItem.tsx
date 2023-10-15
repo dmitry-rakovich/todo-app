@@ -26,7 +26,7 @@ const TaskItem = ({ task }: Props) => {
       {isShowTask && <ModalTask task={task} toggleTask={toggleTask} />}
       <div className={styles.item} >
         <h2 onClick={toggleTask} title="Click to open task">{task.title}</h2>
-        <button onClick={() => removeTask(task.id)}>Delete</button>
+        <button className="delete" onClick={() => removeTask(task.id)} title="Delete task">🗑</button>
       </div>
     </>
   )

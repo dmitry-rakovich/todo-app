@@ -25,8 +25,8 @@ const SubTaskItem = ({ subtask: {id, checked, title} }: Props) => {
   return (
     <div key={id} className={styles.subtask}>
       <input type="checkbox" checked={isChecked} onChange={handleCheckSubTask} className="subtask-checkbox" />
-      <span className={styles.title}>{title}</span>
-      <button onClick={() => removeSubTask(id)}>Delete</button>
+      <span className={styles.title} style={{textDecoration: checked ? "line-through" : ""}}>{title}</span>
+      <button className="delete" onClick={() => removeSubTask(id)} title="Delete subtask">🗑</button>
     </div>
   )
 }
