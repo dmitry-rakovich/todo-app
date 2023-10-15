@@ -1,6 +1,16 @@
-import { legacy_createStore } from "redux";
-import reducer from "./reducer";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { projectReducer } from "./slices/projectSlice";
+import { taskReducer } from "./slices/taskSlice";
 
-const store = legacy_createStore(reducer)
+const reducers = combineReducers({
+    projects: projectReducer,
+    tasks: taskReducer
+})
+const store = configureStore({
+    reducer: reducers
+})
 
 export default store
+
+export type RootStore = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

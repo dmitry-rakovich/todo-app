@@ -14,10 +14,7 @@ export type Task = {
     title: string,
     description: string,
     column: Column,
-    subtasks: SubTask[],
-    files: File[],
     time: Time,
-    comments: Comment[]
 }
 
 export type Time = {
@@ -28,16 +25,8 @@ export type Time = {
 export type SubTask = {
     id: string,
     taskId: string,
-    projectId: string,
     title: string,
     checked: boolean
-}
-
-export type File = {
-    id: string,
-    taskId: string,
-    name: string,
-    path: string
 }
 
 export type Comment = {
