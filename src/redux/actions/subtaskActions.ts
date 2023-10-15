@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { SubTask } from "../../types/DataTypes";
-import { subTaskActions } from "../slices/subTaskslice"
+import { subTaskActions } from "../slices/subTaskSlice"
 import { URL } from "../../constants";
 
 export const fetchSubTasks = createAsyncThunk(
