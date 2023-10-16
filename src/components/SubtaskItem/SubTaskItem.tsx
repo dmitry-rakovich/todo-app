@@ -1,13 +1,13 @@
-import { SubTask } from "../../types/DataTypes"
+import { Subtask } from "../../types/DataTypes"
 import { useState } from "react"
 import { useAppDispatch } from "../../hooks/hooks"
-import styles from "./SubTaskItem.module.css"
-import { deleteSubTask, toggleSubTask } from "../../redux/actions/subTaskActions"
+import styles from "./SubtaskItem.module.css"
+import { deleteSubTask, toggleSubTask } from "../../redux/actions/subtaskActions"
 
 type Props = {
-  subtask: SubTask
+  subtask: Subtask
 }
-const SubTaskItem = ({ subtask: {id, checked, title} }: Props) => {
+const SubtaskItem = ({ subtask: {id, checked, title} }: Props) => {
   const dispatch = useAppDispatch()
   const [isChecked, setIsChecked] = useState(checked)
   const removeSubTask = (id: string) => {
@@ -31,4 +31,4 @@ const SubTaskItem = ({ subtask: {id, checked, title} }: Props) => {
   )
 }
 
-export default SubTaskItem
+export default SubtaskItem

@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { SubTask } from '../../types/DataTypes'
-import { addSubTask, fetchSubTasks, toggleSubTask } from "../actions/subTaskActions"
+import { Subtask } from '../../types/DataTypes'
+import { addSubTask, fetchSubTasks, toggleSubTask } from "../actions/subtaskActions"
 
-type SubTaskState = {
-    subtasks: SubTask[],
+type SubtaskState = {
+    subtasks: Subtask[],
     isLoading: boolean,
     error: string
 }
 
-const initialState: SubTaskState = {
+const initialState: SubtaskState = {
     subtasks: [],
     isLoading: false,
     error: ''
 }
-export const subTaskSlice = createSlice({
+export const subtaskSlice = createSlice({
     name: 'subtasks',
     initialState,
     reducers: {
@@ -63,4 +63,4 @@ export const subTaskSlice = createSlice({
     },
 })
 
-export const { actions: subTaskActions, reducer: subTaskReducer } = subTaskSlice
+export const { actions: subtaskActions, reducer: subtaskReducer } = subtaskSlice

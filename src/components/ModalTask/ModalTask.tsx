@@ -10,9 +10,9 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import {
     fetchSubTasks,
     addSubTask
-} from "../../redux/actions/subTaskActions"
+} from "../../redux/actions/subtaskActions"
 import Comments from "../Comments/Comments"
-import SubTaskItem from "../SubTaskItem/SubTaskItem"
+import SubtaskItem from "../SubtaskItem/SubtaskItem"
 import { fetchComments } from "../../redux/actions/commentsActions"
 import styles from "./ModalTask.module.css"
 import dayjs from "dayjs"
@@ -108,7 +108,7 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
 
                         <h3>Subtasks</h3>
                         {
-                            subtasks.map(subtask => <SubTaskItem key={subtask.id} subtask={subtask} />)
+                            subtasks.map(subtask => <SubtaskItem key={subtask.id} subtask={subtask} />)
                         }
                         <div className={styles.form} onKeyUp={(e) => {
                             if (e.key === 'Enter' && subTaskTitle.trim()) addNewSubTask()
