@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import {
     fetchSubTasks,
     addSubTask
-} from "../../redux/actions/subtaskActions"
+} from "../../redux/actions/subTaskActions"
 import Comments from "../Comments/Comments"
 import SubTaskItem from "../SubTaskItem/SubTaskItem"
 import { fetchComments } from "../../redux/actions/commentsActions"

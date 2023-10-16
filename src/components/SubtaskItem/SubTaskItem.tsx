@@ -2,7 +2,7 @@ import { SubTask } from "../../types/DataTypes"
 import { useState } from "react"
 import { useAppDispatch } from "../../hooks/hooks"
 import styles from "./SubTaskItem.module.css"
-import { deleteSubTask, toggleSubTask } from "../../redux/actions/subtaskActions"
+import { deleteSubTask, toggleSubTask } from "../../redux/actions/subTaskActions"
 
 type Props = {
   subtask: SubTask

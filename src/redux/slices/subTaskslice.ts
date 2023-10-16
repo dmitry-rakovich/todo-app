@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SubTask } from '../../types/DataTypes'
-import { addSubTask, fetchSubTasks, toggleSubTask } from "./../actions/subtaskActions"
+import { addSubTask, fetchSubTasks, toggleSubTask } from "../actions/subTaskActions"
 
 type SubTaskState = {
     subtasks: SubTask[],
