@@ -13,7 +13,7 @@ const initialState: SubtaskState = {
     isLoading: false,
     error: ''
 }
-export const subtaskSlice = createSlice({
+const subtaskSlice = createSlice({
     name: 'subtasks',
     initialState,
     reducers: {

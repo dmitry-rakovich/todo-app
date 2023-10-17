@@ -1,5 +1,5 @@
 import { Subtask } from "../../types/DataTypes"
-import SubtaskItem from "../../components/SubtaskItem/SubtaskItem"
+import SubtaskItem from "../SubtaskItem/SubtaskItem"
 import styles from "./Subtasklist.module.css"
 import { useAppDispatch } from "../../hooks/hooks"
 import { addSubTask } from "../../redux/actions/subtaskActions"
