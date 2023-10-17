@@ -1,13 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { projectReducer } from "./slices/projectSlice";
 import { taskReducer } from "./slices/taskSlice";
-import { subtaskReducer} from "./slices/subtaskSlice";
+// import { subtaskReducer} from "./slices/subtaskSlice";
 import { commentReducer } from "./slices/commentSlice";
 
 const reducers = combineReducers({
     projects: projectReducer,
     tasks: taskReducer,
-    subtasks: subtaskReducer,
+    // subtasks: subtaskReducer,
     comments: commentReducer
 })
 const store = configureStore({
