@@ -7,6 +7,8 @@ import { fetchComments } from "../../redux/actions/commentsActions"
 import dayjs from "dayjs"
 import Comments from "../Comments/Comments"
 import styles from "./ModalTask.module.css"
+import SubtaskList from "../SubtaskList/SubtaskList"
+import { fetchSubTasks } from "../../redux/actions/subtaskActions"
 
 type Props = {
     task: Task,
@@ -17,6 +19,7 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
 
     const dispatch = useAppDispatch()
     const { comments } = useAppSelector(state => state.comments)
+    const { subtasks } = useAppSelector(state => state.subtasks)
 
     const [isEditDescription, setIsEditDescription] = useState(false);
     const [taskDescription, setTaskDescription] = useState(description || 'No description')
@@ -34,6 +37,7 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
 
     useEffect(() => {
         dispatch(fetchComments(id))
+        dispatch(fetchSubTasks(id))
     }, [])
 
 
@@ -80,6 +84,7 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
                                 >{taskDescription}</p>
                         }
                     </div>
+                    <SubtaskList subtasks={subtasks} taskId={id}/>
                     <Comments comments={comments} taskId={id} />
                 </div>
             </div>
