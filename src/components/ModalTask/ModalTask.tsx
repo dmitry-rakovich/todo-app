@@ -3,11 +3,9 @@ import { Status, Task } from "../../types/DataTypes"
 import { getDateDiff } from "../../utils"
 import { editTask } from "../../redux/actions/taskActions"
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
-import { fetchSubTasks } from "../../redux/actions/subtaskActions"
 import { fetchComments } from "../../redux/actions/commentsActions"
 import dayjs from "dayjs"
 import Comments from "../Comments/Comments"
-import SubtaskList from "../SubtaskList/SubtaskList"
 import styles from "./ModalTask.module.css"
 
 type Props = {
@@ -18,7 +16,6 @@ type Props = {
 const ModalTask = ({ task: { description, id, title, time, status }, toggleTask }: Props) => {
 
     const dispatch = useAppDispatch()
-    const { subtasks } = useAppSelector(state => state.subtasks)
     const { comments } = useAppSelector(state => state.comments)
 
     const [isEditDescription, setIsEditDescription] = useState(false);
@@ -36,7 +33,6 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
     }
 
     useEffect(() => {
-        dispatch(fetchSubTasks(id))
         dispatch(fetchComments(id))
     }, [])
 
@@ -84,7 +80,6 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
                                 >{taskDescription}</p>
                         }
                     </div>
-                    <SubtaskList subtasks={subtasks} taskId={id} />
                     <Comments comments={comments} taskId={id} />
                 </div>
             </div>
