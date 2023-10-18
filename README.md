@@ -1,5 +1,5 @@
 # Приложение для трекинга проектов и задач по ним   
-[Деплой](https://todo-app-lyart-eta-55.vercel.app/) приложения *может не работать*
+[Деплой](https://todo-app-lyart-eta-55.vercel.app/) приложения *может не работать*   
 [Деплой](https://todo-app-dmitry-rakovich.vercel.app/) приложения 
 
 ### Возможности:
