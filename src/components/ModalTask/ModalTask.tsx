@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { Status, Task } from "../../types/DataTypes"
 import { getDateDiff } from "../../utils"
 import { editTask } from "../../redux/actions/taskActions"
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
-import { fetchSubTasks, addSubTask } from "../../redux/actions/subtaskActions"
-import Comments from "../Comments/Comments"
-import SubTaskItem from "../SubTaskItem/SubTaskItem"
 import { fetchComments } from "../../redux/actions/commentsActions"
-import styles from "./ModalTask.module.css"
 import dayjs from "dayjs"
+import Comments from "../Comments/Comments"
+import styles from "./ModalTask.module.css"
+import SubtaskList from "../SubtaskList/SubtaskList"
+import { fetchSubTasks } from "../../redux/actions/subtaskActions"
 
 type Props = {
     task: Task,
@@ -18,26 +18,14 @@ type Props = {
 const ModalTask = ({ task: { description, id, title, time, status }, toggleTask }: Props) => {
 
     const dispatch = useAppDispatch()
-    const { subtasks } = useAppSelector(state => state.subtasks)
     const { comments } = useAppSelector(state => state.comments)
-
-    const inputRef = useRef<HTMLInputElement>(null)
+    const { subtasks } = useAppSelector(state => state.subtasks)
 
     const [isEditDescription, setIsEditDescription] = useState(false);
-    const [subTaskTitle, setSubTaskTitle] = useState('')
     const [taskDescription, setTaskDescription] = useState(description || 'No description')
     const [taskStatus, setTaskStatus] = useState<Status>(status)
 
-    const addNewSubTask = () => {
-        dispatch(addSubTask({
-            id: window.crypto.randomUUID(),
-            checked: false,
-            taskId: id,
-            title: subTaskTitle
-        }))
-        setSubTaskTitle('')
-        inputRef.current?.focus()
-    }
+
 
     const changeStatus = () => {
         dispatch(editTask({ id, status: taskStatus }))
@@ -48,8 +36,8 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
     }
 
     useEffect(() => {
-        dispatch(fetchSubTasks(id))
         dispatch(fetchComments(id))
+        dispatch(fetchSubTasks(id))
     }, [])
 
 
@@ -96,21 +84,8 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
                                 >{taskDescription}</p>
                         }
                     </div>
-
-                    <div className={styles.list}>
-
-                        <h3>Subtasks</h3>
-                        {
-                            subtasks.map(subtask => <SubTaskItem key={subtask.id} subtask={subtask} />)
-                        }
-                        <div className={styles.form} onKeyUp={(e) => {
-                            if (e.key === 'Enter' && subTaskTitle.trim()) addNewSubTask()
-                        }}>
-                            <input ref={inputRef} type="text" value={subTaskTitle} onChange={(e) => setSubTaskTitle(e.target.value)} placeholder="Add subtask" />
-                            <button disabled={!subTaskTitle.trim()} onClick={addNewSubTask}>Add</button>
-                        </div>
-                        <Comments comments={comments} taskId={id}/>
-                    </div>
+                    <SubtaskList subtasks={subtasks} taskId={id}/>
+                    <Comments comments={comments} taskId={id} />
                 </div>
             </div>
         </div>

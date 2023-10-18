@@ -22,7 +22,7 @@ export type Time = {
     finish: string
 }
 
-export type SubTask = {
+export type Subtask = {
     id: string,
     taskId: string,
     title: string,
