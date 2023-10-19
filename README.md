@@ -13,4 +13,3 @@
 - React Router
 - Redux Toolkit
 - axios
-- dayjs
