@@ -8,6 +8,7 @@
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;
 }
 
 .task {
@@ -80,4 +81,16 @@ p.description:hover {
 .buttons {
     display: flex;
     gap: 10px;
+}
+
+.delete {
+    margin-top: 50px;
+}
+
+@media screen and (max-width: 768px) {
+    .task {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
 }

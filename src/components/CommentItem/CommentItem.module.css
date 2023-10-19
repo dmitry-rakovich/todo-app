@@ -10,6 +10,10 @@
     text-align: left;
   }
   
+  .text {
+    flex: 1;
+  }
+
   .date {
     font-size: 12px;
   }

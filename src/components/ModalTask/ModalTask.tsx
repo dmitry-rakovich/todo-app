@@ -47,10 +47,7 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
         <div className={styles.modal}>
             <div className={styles.task}>
                 <div className={styles.header}>
-                    <div>
                         <h2>Task: {title}</h2>
-                        <button className="delete" onClick={() => removeTask(id)} title="Delete task">🗑</button>
-                    </div>
                     <button className={styles.close} onClick={toggleTask}>&#10006;</button>
                 </div>
                 <div className={styles.wrapper}>
@@ -92,6 +89,7 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
                     <SubtaskList subtasks={subtasks} taskId={id}/>
                     <Comments comments={comments} taskId={id} />
                 </div>
+                <button className={styles.delete} onClick={() => removeTask(id)} title="Delete task">Delete task</button>
             </div>
         </div>
     )

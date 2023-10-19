@@ -11,15 +11,15 @@
 
 .projects {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 300px);
-    grid-template-rows: repeat(auto-fit, 300px);
+    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-rows: repeat(auto-fit, 250px);
     gap: 20px;
     justify-items: center;
-    grid-auto-rows: 300px;
+    justify-content: center;
+    grid-auto-rows: 250px;
 }
 
 .project {
-    min-width: 300px;
     width: 100%;
     height: 100%;
     padding: 10px;
@@ -28,6 +28,7 @@
     place-items: center;
     background-color: #ebecf0;
     border-radius: 12px;
+    overflow-wrap: anywhere;
 }
 
 .project a {

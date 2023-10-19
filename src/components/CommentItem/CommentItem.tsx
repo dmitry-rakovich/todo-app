@@ -14,7 +14,7 @@ const CommentItem = ({ comment: { date, id, text } }: Props) => {
   }
   return (
     <div className={styles.comment}>
-      <div>
+      <div className={styles.text}>
         <p className={styles.date}>Created: {new Date(date).toLocaleString()}</p>
         <p>{text}</p>
       </div>
