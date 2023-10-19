@@ -1,0 +1,21 @@
+.subtask {
+    display: grid;
+    grid-template-columns: 10% 1fr 15%;
+    align-items: center;
+    justify-items: center;
+    gap: 10px;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.subtask input {
+    width: 50%;
+    height: 50%;
+    justify-self: start;
+}
+
+.title {
+    justify-self: flex-start;
+}

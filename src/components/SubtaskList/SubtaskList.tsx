@@ -3,6 +3,7 @@ import { useAppDispatch } from "../../hooks/hooks"
 import { Subtask } from "../../types/DataTypes"
 import { addSubTask } from "../../redux/actions/subtaskActions"
 import SubtaskItem from "../SubtaskItem/SubtaskItem"
+import styles from "./SubtaskList.module.css"
 
 type Props = {
     subtasks: Subtask[],
@@ -23,14 +24,17 @@ const SubtaskList = ({subtasks, taskId}: Props) => {
         inputRef.current?.focus()
     }
   return (
-    <div>
+    <div className={styles.list}>
         <h3>Subtasks</h3>
         {
             subtasks.map(subtask => <SubtaskItem key={subtask.id} subtask={subtask}/>)
         }
-        <div onKeyUp={(e) => {
-            if(e.key === 'Enter' && title.trim()) addNewItem()
-        }}>
+        <div
+            className={styles.form}
+            onKeyUp={(e) => {
+                if(e.key === 'Enter' && title.trim()) addNewItem()
+            }}
+        >
             <input ref={inputRef} type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Add new subtask" />
             <button onClick={addNewItem} disabled={!title.trim()} title="Add subtask">Add</button>
         </div>

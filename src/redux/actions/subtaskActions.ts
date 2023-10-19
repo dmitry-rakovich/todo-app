@@ -50,7 +50,7 @@ export const toggleSubTask = createAsyncThunk(
             const response = await axios.patch(`${URL}/subtasks/${id}`, {
                 checked
             })
-            thunkAPI.dispatch(subtaskActions.toggleSubTask({checked}))
+            thunkAPI.dispatch(subtaskActions.toggleSubTask({id, checked}))
             return response.data
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
