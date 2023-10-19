@@ -47,11 +47,11 @@ export const deleteTask = createAsyncThunk('tasks/deleteTask',
 ) 
 
 export const editTask = createAsyncThunk('tasks/editTask',
-    async ({id, status, description}: Data, thunkAPI) => {
+    async ({id, status, description}: Data, thunkAPI) => {        
         const data: Data = {
             id
         }
-        if(description) {
+        if(description !== undefined) {            
            data.description = description
         }
         if(status) {
@@ -59,7 +59,7 @@ export const editTask = createAsyncThunk('tasks/editTask',
         }
         try {
             const response = await axios.patch<Task[]>(`${URL}/tasks/${id}`, data)
-            description ?
+            description !== undefined ?
             thunkAPI.dispatch(taskActions.editDescription({id, description}))
             : thunkAPI.dispatch(taskActions.editStatus({id, status}))
             return response.data

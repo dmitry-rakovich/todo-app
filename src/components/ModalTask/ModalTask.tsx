@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Status, Task } from "../../types/DataTypes"
 import { getDateDiff } from "../../utils"
-import { editTask } from "../../redux/actions/taskActions"
+import { deleteTask, editTask } from "../../redux/actions/taskActions"
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import { fetchComments } from "../../redux/actions/commentsActions"
 import Comments from "../Comments/Comments"
@@ -21,7 +21,7 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
     const { subtasks } = useAppSelector(state => state.subtasks)
 
     const [isEditDescription, setIsEditDescription] = useState(false);
-    const [taskDescription, setTaskDescription] = useState(description || 'No description')
+    const [taskDescription, setTaskDescription] = useState(description)
     const [taskStatus, setTaskStatus] = useState<Status>(status)
 
 
@@ -32,6 +32,9 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
     const changeDescription = () => {
         dispatch(editTask({ id, description: taskDescription }))
         setIsEditDescription(false)
+    }
+    const removeTask = (id: string) => {
+        dispatch(deleteTask(id))
     }
 
     useEffect(() => {
@@ -44,7 +47,10 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
         <div className={styles.modal}>
             <div className={styles.task}>
                 <div className={styles.header}>
-                    <h2>Task: {title}</h2>
+                    <div>
+                        <h2>Task: {title}</h2>
+                        <button className="delete" onClick={() => removeTask(id)} title="Delete task">🗑</button>
+                    </div>
                     <button className={styles.close} onClick={toggleTask}>&#10006;</button>
                 </div>
                 <div className={styles.wrapper}>
@@ -69,9 +75,9 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
                                 ? <>
                                     <textarea rows={5} onChange={(e) => setTaskDescription(e.target.value)} value={taskDescription} placeholder="Add description"></textarea>
                                     <div className={styles.buttons}>
-                                        <button onClick={changeDescription} disabled={!taskDescription.trim()}>Save description</button>
+                                        <button onClick={changeDescription}>Save description</button>
                                         <button onClick={() => {
-                                            setTaskDescription(description || "No description")
+                                            setTaskDescription(description)
                                             setIsEditDescription(false)
                                         }} >Close Editor</button>
                                     </div>
@@ -80,7 +86,7 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
                                     className={styles.description}
                                     title="Click to edit description"
                                     onClick={() => setIsEditDescription(true)}
-                                >{taskDescription}</p>
+                                >{taskDescription || "No description"}</p>
                         }
                     </div>
                     <SubtaskList subtasks={subtasks} taskId={id}/>

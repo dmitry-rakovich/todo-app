@@ -1,8 +1,6 @@
 import { useState } from "react"
 import { Task } from "../../types/DataTypes"
 import ModalTask from "../ModalTask/ModalTask"
-import { useAppDispatch } from "../../hooks/hooks"
-import { deleteTask } from "../../redux/actions/taskActions"
 import styles from "./TaskItem.module.css" 
 
 type Props = {
@@ -10,12 +8,7 @@ type Props = {
 }
 const TaskItem = ({ task }: Props) => {
 
-  const dispatch = useAppDispatch()
-
   const [isShowTask, setIsShowTask] = useState(false)
-  const removeTask = (id: string) => {
-    dispatch(deleteTask(id))
-  }
 
   const toggleTask = () => {
     setIsShowTask(!isShowTask)
@@ -26,7 +19,7 @@ const TaskItem = ({ task }: Props) => {
       {isShowTask && <ModalTask task={task} toggleTask={toggleTask} />}
       <div className={styles.item} >
         <h2 onClick={toggleTask} title="Click to open task">{task.title}</h2>
-        <button className="delete" onClick={() => removeTask(task.id)} title="Delete task">🗑</button>
+        <span className={styles.edit}>✏</span>
       </div>
     </>
   )
