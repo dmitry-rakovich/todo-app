@@ -1,7 +1,6 @@
 import { Comment } from "../../types/DataTypes";
 import { useAppDispatch } from "../../hooks/hooks";
 import { deleteComment } from "../../redux/actions/commentsActions";
-import dayjs from "dayjs";
 import styles from "./CommentItem.module.css"
 
 type Props = {
@@ -16,7 +15,7 @@ const CommentItem = ({ comment: { date, id, text } }: Props) => {
   return (
     <div className={styles.comment}>
       <div>
-        <p className={styles.date}>Created: {dayjs(date).format('DD/MM/YYYY, HH:mm')}</p>
+        <p className={styles.date}>Created: {new Date(date).toLocaleString()}</p>
         <p>{text}</p>
       </div>
       <button className="delete" onClick={removeComment} title="Delete comment">🗑</button>

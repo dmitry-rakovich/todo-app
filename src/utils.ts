@@ -1,17 +1,28 @@
-import dayjs from "dayjs"
-export const getDateDiff = (finish:string | Date, start:string | Date) => { 
-    const years = dayjs(finish).get('years') - dayjs(start).get('years')
-    const months = dayjs(finish).get('months') - dayjs(start).get('months')
-    const days = dayjs(finish).get('days') - dayjs(start).get('days')
-    const hours = dayjs(finish).get('hours') - dayjs(start).get('hours')
-    const minutes = dayjs(finish).get('minutes') - dayjs(start).get('minutes')
-    const seconds = dayjs(finish).get('seconds') - dayjs(start).get('seconds')
+export const getDateDiff = (finish: string, start: string) => { 
+    const years = new Date(finish).getFullYear() - new Date(start).getFullYear()
+    let months = new Date(finish).getMonth() - new Date(start).getMonth()
+    let days = new Date(finish).getDate() - new Date(start).getDate()
+    let hours = new Date(finish).getHours() - new Date(start).getHours()
+    let minutes = new Date(finish).getMinutes() - new Date(start).getMinutes()
+    
+    if(months < 0) {
+        months = 12 + months
+    }
+    if(days < 0) {
+        days = 30 + days
+    }
+    if(hours < 0) {
+        hours = 24 + hours
+    }
+    if(minutes < 0) {
+        minutes = 60 + minutes
+    }
+    
     return `
     ${years ? `${years} years` : ''} 
     ${months ? `${months} months` : ''} 
-    ${days ? `${days} days` : ''}
+    ${days ? `${days} days` : ''}   
     ${hours ? `${hours} hours` : ''}
     ${minutes ? `${minutes} minutes` : ''}
-    ${seconds ? `${seconds} seconds` : ''}
     `
-} 
+}

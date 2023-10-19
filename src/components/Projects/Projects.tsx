@@ -50,8 +50,8 @@ const Projects = () => {
                         </div>
                 }
             </div>
+            {isLoading ? <h1>Loading...</h1> : error ? <h1>{error}</h1> :
             <div className={styles.projects}>
-                {isLoading ? <h1>Loading...</h1> : error ? <h1>{error}</h1> : <>
                     {
                         newProjects.map((project: Project) => (
                             <div className={styles.project} key={project.id}>
@@ -62,8 +62,7 @@ const Projects = () => {
                         )
                         )
                     }
-                </>}
-            </div>
+            </div>}
         </>
     )
 }

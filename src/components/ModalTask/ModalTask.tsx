@@ -4,7 +4,6 @@ import { getDateDiff } from "../../utils"
 import { editTask } from "../../redux/actions/taskActions"
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import { fetchComments } from "../../redux/actions/commentsActions"
-import dayjs from "dayjs"
 import Comments from "../Comments/Comments"
 import styles from "./ModalTask.module.css"
 import SubtaskList from "../SubtaskList/SubtaskList"
@@ -50,9 +49,9 @@ const ModalTask = ({ task: { description, id, title, time, status }, toggleTask 
                 </div>
                 <div className={styles.wrapper}>
                     <div className={styles.time}>
-                        <p><b>Created:</b> {dayjs(time.create).format('DD/MM/YYYY, HH:mm:ss')}</p>
+                        <p><b>Created:</b> {new Date(time.create).toLocaleString()}</p>
                         <p><b>In Progress:</b> {getDateDiff(time.finish || new Date().toString(), time.create)}</p>
-                        {time.finish && <p><b>Completed:</b> {dayjs(time.finish).format('DD/MM/YYYY, HH:mm:ss')}</p>}
+                        {time.finish && <p><b>Completed:</b> {new Date(time.finish).toLocaleString()}</p>}
                     </div>
                     <div className={styles.status}>
                         <select value={taskStatus} onChange={(e) => setTaskStatus(e.target.value as Status)}>
